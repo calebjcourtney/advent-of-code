@@ -1,12 +1,16 @@
+import numpy
 import itertools
-data = list(map(int, open("input01.txt").read().split()))
 
-for a, b in itertools.permutations(data, 2):
-    if a + b == 2020:
-        print(a * b)
-        break
 
-for a, b, c in itertools.permutations(data, 3):
-    if a + b + c == 2020:
-        print(a * b * c)
-        break
+def prod_of_sum(data: list, i: int):
+    for a in itertools.permutations(data, i):
+        if sum(a) == 2020:
+            return numpy.prod(a)
+
+
+if __name__ == '__main__':
+    data = list(map(int, open("input01.txt").read().split()))
+    # part 1
+    print(prod_of_sum(data, 2))
+    # part 2
+    print(prod_of_sum(data, 3))
