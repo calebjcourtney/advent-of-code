@@ -1,3 +1,6 @@
+from utils import get_line_data
+
+
 def parse_line(record):
     r, letter, password = record.split()
     letter = letter[0]
@@ -38,7 +41,7 @@ def part_2(data):
 
 
 if __name__ == '__main__':
-    data = open("input02.txt", "r").read().split("\n")
+    data = get_line_data("02")
 
     print(part_1(data))
     print(part_2(data))

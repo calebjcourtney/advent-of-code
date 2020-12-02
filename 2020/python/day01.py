@@ -1,3 +1,5 @@
+from utils import get_int_data
+
 import numpy
 import itertools
 
@@ -9,7 +11,7 @@ def prod_of_sum(data: list, i: int):
 
 
 if __name__ == '__main__':
-    data = list(map(int, open("input01.txt").read().split()))
+    data = get_int_data("01")
     # part 1
     print(prod_of_sum(data, 2))
     # part 2
