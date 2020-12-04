@@ -55,9 +55,9 @@ def is_valid_2(passport):
         elif len(terms['hcl']) != 7:
             return False
 
-        # else:
-        #     # hex baby
-        #     int(terms['hcl'][1:], 16)
+        else:
+            # hex baby
+            int(terms['hcl'][1:], 16)
 
         if terms['ecl'] not in ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth']:
             return False
