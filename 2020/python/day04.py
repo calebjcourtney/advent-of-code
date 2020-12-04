@@ -16,7 +16,6 @@ def is_valid_1(passport):
 
 
 def is_valid_2(passport):
-    passport = passport.replace('\n', ' ')
     terms = {}
     for term in passport.split():
         terms[term.split(':')[0].strip()] = term.split(':')[1].strip()
