@@ -4,22 +4,7 @@ from utils import get_line_data
 data = get_line_data("05")
 
 
-# probably a more clever binary way to do this, but oh well
-def parse_line(line):
-    # row
-    row = line[:-3]
-    row = row.replace("F", "0").replace("B", "1")
-    row = int(row, 2)
-
-    # column
-    column = line[-3:]
-    column = column.replace("L", "0").replace("R", "1")
-    column = int(column, 2)
-
-    return (row * 8) + column
-
-
-seat_ids = [parse_line(x) for x in data]
+seat_ids = [int(line.replace("F", "0").replace("B", "1").replace("L", "0").replace("R", "1"), 2) for line in data]
 
 
 # part 1
