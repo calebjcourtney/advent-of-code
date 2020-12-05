@@ -4,7 +4,7 @@ import re
 
 def get_data(day: str) -> str:
     input_dir = "/".join(os.getcwd().split("/")[:-1])
-    data = open("{}/inputs/input{}.txt".format(input_dir, day), "r").read()
+    data = open("{}/inputs/input{}.txt".format(input_dir, day), "r").read().strip()
     return data
 
 
