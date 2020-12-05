@@ -5,7 +5,7 @@ data = get_line_data("05")
 
 # convert to binary string
 t = str.maketrans({'B': '1', 'R': '1', 'F': '0', 'L': '0'})
-# then int convert to int
+# then convert to int
 seat_ids = [int(line.translate(t), 2) for line in data]
 
 
