@@ -1,10 +1,20 @@
 import os
 import re
 
+from aocd.models import Puzzle
+
 
 def get_data(day: str) -> str:
     input_dir = "/".join(os.getcwd().split("/")[:-1])
-    data = open("{}/inputs/input{}.txt".format(input_dir, day), "r").read().strip()
+    try:
+        data = open("{}/inputs/input{}.txt".format(input_dir, day), "r").read().strip()
+    except FileNotFoundError:
+        puzzle = Puzzle(year=2020, day=int(day))
+        with open("{}/inputs/input{}.txt".format(input_dir, day), "w+") as saveFile:
+            saveFile.write(puzzle.input_data)
+
+        data = open("{}/inputs/input{}.txt".format(input_dir, day), "r").read().strip()
+
     return data
 
 
