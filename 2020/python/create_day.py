@@ -14,6 +14,8 @@ import numpy
 import itertools
 import collections
 
+from aocd import submit
+
 
 data = get_data("{day}")
 
@@ -25,6 +27,9 @@ int_data = get_int_data("{day}")
 
 for num in int_data:
     pass
+
+# submit(answer_1, part="a", day={day}, year=2020)
+# submit(answer_2, part="b", day={day}, year=2020)
 """
 
 # if the file exists, we don't want to accidentally overwrite it
