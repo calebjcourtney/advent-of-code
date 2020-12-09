@@ -1,11 +1,9 @@
-from itertools import combinations
-
 from utils import get_int_data
 
 
 def is_sum_of_two_vals(num, inits):
-    for x in combinations(inits, 2):
-        if sum(x) == num:
+    for x in inits:
+        if num - x in inits:
             return True
 
     return False
