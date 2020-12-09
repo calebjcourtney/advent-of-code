@@ -43,4 +43,4 @@ if __name__ == '__main__':
 
     # part two
     contiguous_answer = part_two(my_num, int_data)
-    submit(my_num, part = "b", day = 9, year=2020)
+    submit(contiguous_answer, part = "b", day = 9, year=2020)
