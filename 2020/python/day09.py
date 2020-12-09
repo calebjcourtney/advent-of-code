@@ -10,12 +10,13 @@ def is_sum_of_two_vals(num, inits):
 
 
 def part_one(int_data):
-    inits = set(int_data[:25])
+    inits = int_data[:25]
     for num in int_data[25:]:
         if not is_sum_of_two_vals(num, inits):
             return num
 
-        inits.add(num)
+        inits.append(num)
+        inits = inits[1:]
 
 
 def part_two(my_num, int_data):
