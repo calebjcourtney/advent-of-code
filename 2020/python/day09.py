@@ -1,16 +1,12 @@
-from utils import get_int_data
+from itertools import combinations
 
-from aocd import submit
+from utils import get_int_data
 
 
 def is_sum_of_two_vals(num, inits):
-    for x in inits:
-        for y in inits:
-            if x == y:
-                continue
-
-            if x + y == num:
-                return True
+    for x in combinations(inits, 2):
+        if sum(x) == num:
+            return True
 
     return False
 
@@ -39,8 +35,8 @@ if __name__ == '__main__':
 
     # part one
     my_num = part_one(int_data)
-    submit(my_num, part = "a", day = 9, year=2020)
+    print(my_num)
 
     # part two
     contiguous_answer = part_two(my_num, int_data)
-    submit(contiguous_answer, part = "b", day = 9, year=2020)
+    print(contiguous_answer)
