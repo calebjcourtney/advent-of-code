@@ -14,22 +14,26 @@ import numpy
 import itertools
 import collections
 
-from aocd import submit
+
+def part_one(line_data):
+    for line in line_data:
+        pass
 
 
-data = get_data("{day}")
+def part_two():
+    for line in line_data:
+        pass
 
-line_data = get_line_data("{day}")
-for line in line_data:
-    pass
+if __name__ == '__main__':
+    data = get_data("{day}")
+    line_data = get_line_data("{day}")
+    int_data = get_int_data("{day}")
 
-int_data = get_int_data("{day}")
+    p1_result = part_one(data)
+    print(p1_result)
 
-for num in int_data:
-    pass
-
-# submit(answer_1, part="a", day={day}, year=2020)
-# submit(answer_2, part="b", day={day}, year=2020)
+    p2_result = part_two(data)
+    print(p2_result)
 """
 
 # if the file exists, we don't want to accidentally overwrite it
