@@ -17,9 +17,6 @@ def part_one(line_data):
     return ones * threes
 
 
-memorize_ways = {}
-
-
 def part_two(line_data):
     points = [1] + [0] * (line_data[-1])
 
