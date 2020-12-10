@@ -17,6 +17,7 @@ def part_one(line_data):
     return ones * threes
 
 
+# props to AltNyx for this elegant solution
 def part_two(line_data):
     points = [1] + [0] * (line_data[-1])
 
