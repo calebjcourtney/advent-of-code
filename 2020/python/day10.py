@@ -20,30 +20,13 @@ def part_one(line_data):
 memorize_ways = {}
 
 
-def part_two(line_data, start, goal):
-    point = (len(line_data), start)
+def part_two(line_data):
+    points = [1] + [0] * (line_data[-1])
 
-    if point in memorize_ways:
-        return memorize_ways[point]
+    for r in line_data:
+        points[r] = points[r - 1] + points[r - 2] + points[r - 3]
 
-    ways = 0
-
-    if goal - start <= 3:
-        ways += 1
-
-    if not line_data:
-        return ways
-
-    # yay! recursion
-    if line_data[0] - start <= 3:
-        ways += part_two(line_data[1:], line_data[0], goal)
-
-    # wut. more recursion? wy tho
-    ways += part_two(line_data[1:], start, goal)
-
-    memorize_ways[point] = ways
-
-    return ways
+    return points[-1]
 
 
 if __name__ == '__main__':
@@ -53,5 +36,5 @@ if __name__ == '__main__':
     p1_result = part_one(data)
     print(p1_result)
 
-    p2_result = part_two(data, 0, max(data) + 3)
+    p2_result = part_two(data)
     print(p2_result)
