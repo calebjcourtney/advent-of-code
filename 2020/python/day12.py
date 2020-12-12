@@ -21,9 +21,6 @@ def part_one(line_data):
             elif rotation == 270:
                 action = "S"
 
-            else:
-                print(rotation)
-
         if action == "L":
             rotation += units
 
