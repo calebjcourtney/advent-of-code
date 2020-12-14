@@ -12,7 +12,7 @@ def run_mask(value: int, mask: str) -> int:
 
 def part_one(data: List[str]) -> int:
     mask = None
-    mem = collections.defaultdict(int)
+    memory = collections.defaultdict(int)
     for line in data:
         op, arg = line.split(' = ')
 
@@ -20,10 +20,10 @@ def part_one(data: List[str]) -> int:
             mask = arg
 
         else:
-            pos = int(op[4:-1])
-            mem[pos] = run_mask(int(arg), mask)
+            mem_pos = int(op[4:-1])
+            memory[mem_pos] = run_mask(int(arg), mask)
 
-    return sum(mem.values())
+    return sum(memory.values())
 
 
 def run_masks(mem_pos: int, mask: str) -> Generator:
