@@ -10,22 +10,6 @@ def run_mask(value: int, mask: str) -> int:
     return value
 
 
-def part_one(data: List[str]) -> int:
-    mask = None
-    memory = collections.defaultdict(int)
-    for line in data:
-        op, arg = line.split(' = ')
-
-        if op == 'mask':
-            mask = arg
-
-        else:
-            mem_pos = int(op[4:-1])
-            memory[mem_pos] = run_mask(int(arg), mask)
-
-    return sum(memory.values())
-
-
 def run_masks(mem_pos: int, mask: str) -> Generator:
     if not mask:
         yield 0
@@ -42,7 +26,7 @@ def run_masks(mem_pos: int, mask: str) -> Generator:
                 yield 2 * m + 1
 
 
-def part_two(data: List[str]) -> int:
+def run_part(data: List[str], part: int):
     mask = None
     memory = collections.defaultdict(int)
     for line in data:
@@ -54,9 +38,11 @@ def part_two(data: List[str]) -> int:
         else:
             mem_pos = int(op[4:-1])
 
-            # the only difference for part 2
-            for m in run_masks(mem_pos, mask):
-                memory[m] = int(arg)
+            if part == 1:
+                memory[mem_pos] = run_mask(int(arg), mask)
+            elif part == 2:
+                for m in run_masks(mem_pos, mask):
+                    memory[m] = int(arg)
 
     return sum(memory.values())
 
@@ -64,8 +50,8 @@ def part_two(data: List[str]) -> int:
 if __name__ == '__main__':
     data = get_line_data("14")
 
-    p1_result = part_one(data)
+    p1_result = run_part(data, 1)
     print(p1_result)
 
-    p2_result = part_two(data)
+    p2_result = run_part(data, 2)
     print(p2_result)
