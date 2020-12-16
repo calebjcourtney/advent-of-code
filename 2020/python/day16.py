@@ -1,22 +1,29 @@
-from utils import get_data
+from utils import get_data, special_split
 
 from typing import List, Set, Dict
 
 
+class Rule(object):
+    def __init__(self, name: str, r1: int, r2: int, r3: int, r4: int):
+        self.name = name
+
+        self.r1 = int(r1)
+        self.r2 = int(r2)
+        self.r3 = int(r3)
+        self.r4 = int(r4)
+
+    def is_valid(self, num: int):
+        return self.r1 <= num <= self.r2 or self.r3 <= num <= self.r4
+
+
 def parse_rules_ranges(rules_ranges: List[str]) -> Dict[str, Set]:
-    out = {}
+    out = []
     for line in rules_ranges.split("\n"):
-        name, options = line.split(": ")
+        name, r1, r2, r3, r4 = special_split(line, [": ", " or ", "-"])
 
-        a, b = options.split(" or ")
+        rule = Rule(name, r1, r2, r3, r4)
 
-        r1, r2 = a.split("-")
-        r3, r4 = b.split("-")
-
-        out[name] = set(range(int(r1), int(r2) + 1)) | set(range(int(r3), int(r4) + 1))
-
-        # not sure why this didn't work if anyone wants to offer insight
-        # out[name] = lambda x: (int(r1) <= x <= int(r2)) or (int(r3) <= x <= int(r4))
+        out.append(rule)
 
     return out
 
@@ -33,13 +40,13 @@ def parse_nearby_tickets(nearby_tickets: List[str]) -> List[List[int]]:
     return out
 
 
-def part_one(rules_ranges: Dict[str, Set], nearby_tickets: List[List[int]]):
+def part_one(rules_ranges: List['Rule'], nearby_tickets: List[List[int]]):
     total = 0
 
     for ticket in nearby_tickets:
         for value in ticket:
             # check if the value is valid for any of the options
-            is_valid = any([value in valid_vals for name, valid_vals in rules_ranges.items()])
+            is_valid = any([rule.is_valid(value) for rule in rules_ranges])
 
             if not is_valid:
                 total += value
@@ -50,7 +57,7 @@ def part_one(rules_ranges: Dict[str, Set], nearby_tickets: List[List[int]]):
 def is_valid_ticket(rules_ranges: Dict[str, Set], ticket: List[int]):
     # reuse code from above, but I'm not sure how to break them apart
     for value in ticket:
-        is_valid = any([value in valid_vals for name, valid_vals in rules_ranges.items()])
+        is_valid = any([rule.is_valid(value) for rule in rules_ranges])
         if not is_valid:
             return False
 
@@ -59,31 +66,42 @@ def is_valid_ticket(rules_ranges: Dict[str, Set], ticket: List[int]):
 
 def part_two(rules_ranges: Dict[str, Set], your_ticket: List[int], nearby_tickets: List[List[int]]):
     # eliminate any tickets with invalid values
-    valid_tickets = [ticket for ticket in nearby_tickets if is_valid_ticket(rules_ranges, ticket)]
+    nearby_tickets = [ticket for ticket in nearby_tickets if is_valid_ticket(rules_ranges, ticket)]
 
     # set all indices as containing each name for the rules
-    is_valids = [set([key for key in rules_ranges.keys()]) for _ in your_ticket]
+    valid_options = [set([rule.name for rule in rules_ranges]) for _ in your_ticket]
 
     # keep iterating while we have more valid options than we should
-    while sum(map(len, is_valids)) > len(is_valids):
-        for ticket in valid_tickets:
+    while sum(map(len, valid_options)) > len(valid_options):
+        # iterate through the nearby tickets
+        for ticket in nearby_tickets:
+
+            # look through the values in each ticket
             for index, value in enumerate(ticket):
-                for key, range_vals in rules_ranges.items():
-                    if value not in range_vals and key in is_valids[index]:
-                        is_valids[index].remove(key)
+
+                # look through the params of each rule
+                for rule in rules_ranges:
+
+                    # if the value for the column is not in the valid range for the rules
+                    # and the name of that rule is still in our valid options
+                    if not rule.is_valid(value) and rule.name in valid_options[index]:
+                        valid_options[index].remove(rule.name)
 
         # if we know that one of the values is solved,
         # then we can go through and remove it from the other options
-        for vals in is_valids:
+        for vals in valid_options:
             if len(vals) == 1:
-                for others in is_valids:
+                for others in valid_options:
                     if list(vals)[0] in others and vals != others:
                         others.remove(list(vals)[0])
+
+    # convert the List[Set[str]] to List[str]
+    valid_options = [list(val)[0] for val in valid_options]
 
     # yay! now we can spit out the data
     total = 1
     for index, value in enumerate(your_ticket):
-        if "departure" in list(is_valids[index])[0]:
+        if "departure" in valid_options[index]:
             total *= your_ticket[index]
 
     return total
