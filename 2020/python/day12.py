@@ -1,10 +1,13 @@
+from typing import List
+
+
 from utils import get_line_data
 
 
-def part_one(line_data):
+def part_one(data: List[str]) -> int:
     x, y = 0, 0
     rotation = 0
-    for line in line_data:
+    for line in data:
         action = line[0]
         units = int(line[1:])
 
@@ -50,7 +53,7 @@ def part_one(line_data):
     return abs(x) + abs(y)
 
 
-def part_two(data):
+def part_two(data: List[str]) -> int:
     x, y = 0, 0
     waypoint_x, waypoint_y = 10, 1
 

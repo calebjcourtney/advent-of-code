@@ -1,7 +1,9 @@
+from typing import List
+
 from utils import get_line_data
 
 
-def part_one_adjacents(grid, row, col):
+def part_one_adjacents(grid: List[str], row: int, col: int) -> List[str]:
     adj = []
     for x in (-1, 0, 1):
         for y in (-1, 0, 1):
@@ -14,7 +16,7 @@ def part_one_adjacents(grid, row, col):
     return adj
 
 
-def process_part_one_seats(grid):
+def process_part_one_seats(grid: List[str]) -> List[str]:
     newgrid = []
     for row in range(len(grid)):
         newrow = ''
@@ -35,7 +37,7 @@ def process_part_one_seats(grid):
     return newgrid
 
 
-def part_two_adjacents(grid, row, col):
+def part_two_adjacents(grid: List[str], row: int, col: int) -> List[str]:
     adj = []
     for x in (-1, 0, 1):
         for y in (-1, 0, 1):
@@ -55,7 +57,7 @@ def part_two_adjacents(grid, row, col):
     return adj
 
 
-def process_part_two_seats(grid):
+def process_part_two_seats(grid: List[str]) -> List[str]:
     newgrid = []
     for row in range(len(grid)):
         newrow = ''
@@ -76,7 +78,7 @@ def process_part_two_seats(grid):
     return newgrid
 
 
-def part_one(grid):
+def part_one(grid: List[str]) -> int:
     while True:
         after = process_part_one_seats(grid)
 
@@ -86,7 +88,7 @@ def part_one(grid):
         grid = after
 
 
-def part_two(grid):
+def part_two(grid: List[str]) -> int:
     while True:
         after = process_part_two_seats(grid)
         if after == grid:

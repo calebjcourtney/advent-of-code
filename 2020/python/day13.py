@@ -20,6 +20,33 @@ def part_one(timestamp: int, busses: List[int]) -> int:
     return min([x for x in mapping if x != 0]) * mapping.index(min([x for x in mapping if x != 0]))
 
 
+def is_valid(trb: Tuple[int, int, int]) -> bool:
+    time, remainder, bus = trb
+    return ((time + remainder) % bus) == 0
+
+
+def get_base_time(first_val: int) -> int:
+    x = 100000000000000
+    while x % first_val != 0:
+        x += 1
+
+    return x
+
+
+def fun_brute_force(pairs: List[Tuple[int, int]]):
+    mult = pairs[0][1]
+    time = get_base_time(mult)
+
+    missing = False
+    while not missing:
+        print(time, end = "\r")
+        time += mult
+
+        missing = all(map(is_valid, [(time, remainder, bus) for remainder, bus in pairs]))
+
+    return time
+
+
 def part_two(pairs: List[Tuple[int, int]]) -> int:
     # chinese remainder theorem
 
@@ -55,3 +82,7 @@ if __name__ == '__main__':
 
     p2_result = part_two(busses)
     print(p2_result)
+
+    pairs = [(index, int(bus)) for index, bus in enumerate(data[1].split(",")) if bus != "x"]
+    fun_result = fun_brute_force(pairs)
+    print(fun_result)
