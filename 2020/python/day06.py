@@ -1,34 +1,37 @@
 from utils import get_data
 
-# part 1
-data = get_data("06")
-data = data.split("\n\n")
-data = [rec.replace("\n", "") for rec in data]
-
-total = 0
-for rec in data:
-    pos = set(x for x in rec)
-
-    total += len(pos)
-
-print(total)
+from typing import List
 
 
-# part 2
-data = get_data("06")
-data = data.split("\n\n")
+def part_one(data: List[str]) -> int:
+    data = [record.replace("\n", "") for record in data]
+    data = [set(record) for record in data]
 
-total = 0
-for record in data:
-    cur = None
-    for passenger in record.split("\n"):
-        temp = set(x for x in passenger)
+    total = sum([len(record) for record in data])
 
-        if cur is None:
-            cur = temp
-        else:
-            cur = cur & temp
+    return total
 
-    total += len(cur)
 
-print(total)
+def part_two(data: List[str]) -> int:
+    total = 0
+    for record in data:
+        cur = None
+        for passenger in record.split("\n"):
+            temp = set(x for x in passenger)
+
+            if cur is None:
+                cur = temp
+            else:
+                cur = cur & temp
+
+        total += len(cur)
+
+    return total
+
+
+if __name__ == '__main__':
+    data = get_data("06")
+    data = data.split("\n\n")
+
+    print(part_one(data))
+    print(part_two(data))
