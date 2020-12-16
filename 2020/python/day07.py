@@ -1,60 +1,79 @@
-from utils import get_line_data
-
-inputList = get_line_data("07")
-
-# this took me the longest time to put together
-bags = {}
-for line in inputList:
-    line = line.split(" contain ")
-
-    parent_bag = " ".join(line[0].split()[:-1])
-    contains = line[1].split(", ")
-
-    # this was annoying
-    if contains == ["no other bags."]:
-        contains = []
-        nums = []
-
-    else:
-        nums = [int(x.split()[0]) for x in contains]
-        contains = [" ".join(x.split()[1:-1]) for x in contains]
-
-    bags[parent_bag] = []
-
-    for x in range(len(nums)):
-        bags[parent_bag].append({"count": nums[x], "color": contains[x]})
+from typing import Dict, List
 
 
-# part 1
-def canContain(bag):
-    if "shiny gold" in [content["color"] for content in bags[bag]]:
+def parse_bags(relationships: List[str]) -> Dict[str, List[Dict[str, int]]]:
+    bags = {}
+
+    for relationship in relationships:
+        parent_bag, children = relationship.split(" contain ")
+
+        parent_bag = " ".join(parent_bag.split()[:-1])
+
+        bags[parent_bag] = []
+        if children == "no other bags.":
+            bags[parent_bag].append(
+                {
+                    "count": 0,
+                    "color": None
+                }
+            )
+            continue
+
+        children = children.split(", ")
+
+        for child in children:
+            child = child.split()
+
+            count = int(child[0])
+            color = " ".join(child[1:-1])
+
+            bags[parent_bag].append(
+                {
+                    "count": count,
+                    "color": color
+                }
+            )
+
+    return bags
+
+
+def canContain(bag: str, bags: Dict[str, List[Dict[str, int]]]) -> bool:
+    if "shiny gold" in [child["color"] for child in bags[bag]]:
         return True
 
-    for nextBag in [content["color"] for content in bags[bag]]:
-        # yay recursion
-        if canContain(nextBag):
+    for nextBag in [child["color"] for child in bags[bag] if child["color"] is not None]:
+        if canContain(nextBag, bags):
             return True
 
     return False
 
 
-totalNum = 0
-for bag in bags.keys():
-    if canContain(bag):
-        totalNum += 1
-
-print(f"part one answer: {totalNum}")
-
-
-# part 2
-def numContained(bag):
-    contained = bags[bag]
+def part_one(bags: List[Dict[str, int]]) -> int:
     total = 0
-    for sub_bag in contained:
-        # why is there more recursion
-        total += sub_bag["count"] * (numContained(sub_bag["color"]) + 1)
+
+    for bag in bags.keys():
+        if canContain(bag, bags):
+            total += 1
 
     return total
 
 
-print(f"part two answer: {numContained('shiny gold')}")
+def part_two(bags: List[Dict[str, int]], parent: str) -> int:
+    if parent is None:
+        return 0
+    else:
+        parent = bags[parent]
+
+    total = 0
+    for child in parent:
+        total += child["count"] * (part_two(bags, child["color"]) + 1)
+
+    return total
+
+
+if __name__ == '__main__':
+    data = open("input.txt", "r").read().strip().split("\n")
+    bags = parse_bags(data)
+
+    print(part_one(bags))
+    print(part_two(bags, "shiny gold"))
