@@ -19,7 +19,7 @@ class Rule:
         return all(self.is_valid(num) for num in nums)
 
 
-def parse_rules_ranges(rules_ranges: List[str]) -> Dict[str, Set]:
+def parse_rules_ranges(rules_ranges: List[str]) -> List[Rule]:
     out = []
     for line in rules_ranges.split("\n"):
         name, r1, r2, r3, r4 = special_split(line, [": ", " or ", "-"])
@@ -43,7 +43,7 @@ def parse_nearby_tickets(nearby_tickets: List[str]) -> List[List[int]]:
     return out
 
 
-def part_one(rules_ranges: List['Rule'], nearby_tickets: List[List[int]]):
+def part_one(rules_ranges: List[Rule], nearby_tickets: List[List[int]]):
     total = 0
 
     for ticket in nearby_tickets:
