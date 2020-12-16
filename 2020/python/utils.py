@@ -1,5 +1,6 @@
 import os
 import re
+from typing import List
 
 from aocd.models import Puzzle
 
@@ -29,4 +30,10 @@ def get_int_data(day: str):
 
 
 def re_split(val: str, chars: str) -> list:
+    # splits along any of the chars provided in the list
     return re.split("[{}]".format(chars), val)
+
+
+def special_split(line: str, patterns: List[str]) -> List[str]:
+    # splits along any of the patters provided in the list
+    return re.split("|".join(patterns), line)
