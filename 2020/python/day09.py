@@ -1,7 +1,9 @@
+from typing import List
+
 from utils import get_int_data
 
 
-def is_sum_of_two_vals(num, inits):
+def is_sum_of_two_vals(num: int, inits: List[int]) -> bool:
     for x in inits:
         if num - x in inits:
             return True
@@ -9,7 +11,7 @@ def is_sum_of_two_vals(num, inits):
     return False
 
 
-def part_one(int_data):
+def part_one(int_data: List[int]) -> int:
     inits = int_data[:25]
     for num in int_data[25:]:
         if not is_sum_of_two_vals(num, inits):
@@ -19,7 +21,7 @@ def part_one(int_data):
         inits = inits[1:]
 
 
-def part_two(my_num, int_data):
+def part_two(my_num: int, int_data: List[int]) -> int:
     end = 3
     while True:
         for start in range(len(int_data)):
