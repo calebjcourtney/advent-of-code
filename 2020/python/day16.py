@@ -3,7 +3,7 @@ from utils import get_data, special_split
 from typing import List, Set, Dict
 
 
-class Rule(object):
+class Rule:
     def __init__(self, name: str, r1: int, r2: int, r3: int, r4: int):
         self.name = name
 
