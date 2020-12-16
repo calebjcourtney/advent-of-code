@@ -1,13 +1,15 @@
+from typing import List
+
 from utils import get_line_data
 
 
-def part_one(line_data):
+def part_one(data: List[str]) -> int:
     accumulator = 0
     processed = set()
     index = 0
 
     while True:
-        cur = line_data[index]
+        cur = data[index]
 
         if index in processed:
             break
@@ -30,20 +32,20 @@ def part_one(line_data):
 
 
 # slight modification to part one
-def run_instructions(lines):
+def run_instructions(data: List[str]) -> int:
     accumulator = 0
     processed = set()
     index = 0
 
     while True:
         # we've reached the last line
-        if index == len(lines):
+        if index == len(data):
             return accumulator
 
-        cur = lines[index]
+        cur = data[index]
 
         if index in processed:
-            return False
+            return 0
         else:
             processed.add(index)
 
@@ -60,10 +62,10 @@ def run_instructions(lines):
             index += 1
 
 
-def part_two(line_data):
-    for line in range(len(line_data)):
+def part_two(data) -> int:
+    for line in range(len(data)):
         # make a copy
-        lines = line_data[:]
+        lines = data[:]
 
         # swap the data
         if "jmp" in lines[line]:
@@ -83,7 +85,7 @@ def part_two(line_data):
 
 
 if __name__ == '__main__':
-    line_data = get_line_data("08")
+    data = get_line_data("08")
 
-    print(part_one(line_data))
-    print(part_two(line_data))
+    print(part_one(data))
+    print(part_two(data))
