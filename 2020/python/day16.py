@@ -12,8 +12,11 @@ class Rule(object):
         self.r3 = int(r3)
         self.r4 = int(r4)
 
-    def is_valid(self, num: int):
+    def is_valid(self, num: int) -> bool:
         return self.r1 <= num <= self.r2 or self.r3 <= num <= self.r4
+
+    def all_valid(self, nums: List[int]):
+        return all(self.is_valid(num) for num in nums)
 
 
 def parse_rules_ranges(rules_ranges: List[str]) -> Dict[str, Set]:
@@ -74,18 +77,15 @@ def part_two(rules_ranges: Dict[str, Set], your_ticket: List[int], nearby_ticket
     # keep iterating while we have more valid options than we should
     while sum(map(len, valid_options)) > len(valid_options):
         # iterate through the nearby tickets
-        for ticket in nearby_tickets:
+        for index, nums in enumerate(zip(*nearby_tickets)):
 
-            # look through the values in each ticket
-            for index, value in enumerate(ticket):
+            # look through the params of each rule
+            for rule in rules_ranges:
 
-                # look through the params of each rule
-                for rule in rules_ranges:
-
-                    # if the value for the column is not in the valid range for the rules
-                    # and the name of that rule is still in our valid options
-                    if not rule.is_valid(value) and rule.name in valid_options[index]:
-                        valid_options[index].remove(rule.name)
+                # if all the values in the column are not valid
+                # then we can remove the rule name from
+                if not rule.all_valid(nums):
+                    valid_options[index].discard(rule.name)
 
         # if we know that one of the values is solved,
         # then we can go through and remove it from the other options
