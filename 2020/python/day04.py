@@ -1,7 +1,7 @@
 from utils import get_data
 
 
-def is_valid_1(passport):
+def part_one(passport: str) -> bool:
     passport = passport.replace('\n', ' ')
     terms = {}
     for term in passport.split(" "):
@@ -13,10 +13,6 @@ def is_valid_1(passport):
         return False
     else:
         return True
-
-
-def part_one(passports):
-    return sum(map(is_valid_1, passports))
 
 
 TERM_PARAMS = {
@@ -31,8 +27,8 @@ TERM_PARAMS = {
 }
 
 
-def is_valid_2(passport):
-    if not is_valid_1(passport):
+def is_valid_2(passport: str) -> bool:
+    if not part_one(passport):
         return False
 
     terms = {}
@@ -50,13 +46,9 @@ def is_valid_2(passport):
     return True
 
 
-def part_two(passports):
-    return sum(map(is_valid_2, passports))
-
-
 if __name__ == '__main__':
     data = get_data("04")
     passports = data.strip().split('\n\n')
 
-    print(part_one(passports))
-    print(part_two(passports))
+    print(sum(map(part_one, passports)))
+    print(sum(map(is_valid_2, passports)))
