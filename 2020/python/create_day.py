@@ -15,19 +15,20 @@ import itertools
 import collections
 
 
-def part_one(line_data):
-    for line in line_data:
+def part_one(data):
+    for line in data:
         pass
 
 
-def part_two():
-    for line in line_data:
+def part_two(data):
+    for line in data:
         pass
+
 
 if __name__ == '__main__':
     data = get_data("{day}")
-    line_data = get_line_data("{day}")
-    int_data = get_int_data("{day}")
+    data = get_line_data("{day}")
+    data = get_int_data("{day}")
 
     p1_result = part_one(data)
     print(p1_result)
