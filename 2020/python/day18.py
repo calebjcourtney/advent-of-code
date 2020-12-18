@@ -76,8 +76,8 @@ def part_two(line: str) -> int:
 if __name__ == '__main__':
     data = get_line_data("18")
 
-    p1_result = sum(map(part_one, data))
-    print(f"Part 1: {p1_result}")
+    # combine all the lines into one
+    data = "(" + ") + (".join(data) + ")"
 
-    p2_result = sum(map(part_two, data))
-    print(f"Part 2: {p2_result}")
+    print(part_one(data))
+    print(part_two(data))
