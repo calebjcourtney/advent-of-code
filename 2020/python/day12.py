@@ -1,6 +1,5 @@
 from typing import List
 
-
 from utils import get_line_data
 
 
@@ -14,37 +13,29 @@ def part_one(data: List[str]) -> int:
         if action == "F":
             if rotation == 0:
                 action = "E"
-
             elif rotation == 90:
                 action = "N"
-
             elif rotation == 180:
                 action = "W"
-
             elif rotation == 270:
                 action = "S"
 
         if action == "L":
             rotation += units
-
             if rotation >= 360:
                 rotation -= 360
 
         elif action == "R":
             rotation -= units
-
             if rotation < 0:
                 rotation += 360
 
         elif action == "N":
             y += units
-
         elif action == "S":
             y -= units
-
         elif action == "E":
             x += units
-
         elif action == "W":
             x -= units
 
