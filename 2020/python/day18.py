@@ -3,22 +3,15 @@ from utils import get_line_data
 from typing import List, Tuple
 
 
-# Modified from here: https://scipython.com/blog/parenthesis-matching-in-python/
 # Might add this to my utils later
 def find_parentheses(line: str) -> List[Tuple[int, int]]:
     stack = []
     parentheses_locs = []
-    for i, c in enumerate(line):
-        if c == '(':
-            stack.append(i)
-        elif c == ')':
-            try:
-                parentheses_locs.append((stack.pop(), i))
-            except IndexError:
-                raise IndexError('Too many close parentheses at index {}'.format(i))
-    if stack:
-        raise IndexError('No matching close parenthesis to open parenthesis '
-                         'at index {}'.format(stack.pop()))
+    for index, character in enumerate(line):
+        if character == '(':
+            stack.append(index)
+        elif character == ')':
+            parentheses_locs.append((stack.pop(), index))
 
     return parentheses_locs
 
@@ -33,13 +26,9 @@ def eval_expression(line: str) -> int:
     if len(evals) == 3:
         return eval(line)
 
-    cur = None
+    cur = evals[0]
     for index in range(2, len(evals), 2):
-        if cur is None:
-            cur = int(eval("".join(evals[index - 2:index + 1])))
-
-        else:
-            cur = int(eval("".join([str(cur)] + evals[index - 1:index + 1])))
+        cur = int(eval("".join([str(cur)] + evals[index - 1:index + 1])))
 
     return int(cur)
 
@@ -74,7 +63,7 @@ def eval_part_two(line: str) -> int:
     if len(evals) == 3:
         return eval(line)
 
-    # evaluate the pluses first
+    # evaluate the plus signs first
     while "+" in evals:
         first_plus = evals.index("+")
 
