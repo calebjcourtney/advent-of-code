@@ -1,9 +1,11 @@
 from utils import get_line_data
 
+from typing import List, Tuple
+
 
 # Modified from here: https://scipython.com/blog/parenthesis-matching-in-python/
 # Might add this to my utils later
-def find_parentheses(line):
+def find_parentheses(line: str) -> List[Tuple[int, int]]:
     stack = []
     parentheses_locs = []
     for i, c in enumerate(line):
@@ -21,7 +23,7 @@ def find_parentheses(line):
     return parentheses_locs
 
 
-def eval_expression(line):
+def eval_expression(line: str) -> int:
     # eval in order
     if len(line.split()) == 3:
         return int(eval(line))
@@ -34,15 +36,15 @@ def eval_expression(line):
     cur = None
     for index in range(2, len(evals), 2):
         if cur is None:
-            cur = int(eval(" ".join(evals[index - 2:index + 1])))
+            cur = int(eval("".join(evals[index - 2:index + 1])))
 
         else:
-            cur = int(eval(" ".join([str(cur)] + evals[index - 1:index + 1])))
+            cur = int(eval("".join([str(cur)] + evals[index - 1:index + 1])))
 
     return int(cur)
 
 
-def part_one(data):
+def part_one(data: List[str]) -> int:
     total = 0
     for line in data:
         parentheses_locs = find_parentheses(line)
@@ -66,40 +68,30 @@ def part_one(data):
     return total
 
 
-def eval_part_two(line):
+def eval_part_two(line: str) -> int:
     evals = line.split()
 
     if len(evals) == 3:
         return eval(line)
 
+    # evaluate the pluses first
     while "+" in evals:
         first_plus = evals.index("+")
 
         new_evals = evals[:first_plus - 1]
 
-        new_val = int(eval(" ".join(evals[first_plus - 1:first_plus + 2])))
+        new_val = int(eval("".join(evals[first_plus - 1:first_plus + 2])))
         new_evals.append(str(new_val))
 
         new_evals += evals[first_plus + 2:]
 
         evals = new_evals[:]
 
-    while "*" in evals:
-        first_mult = evals.index("*")
-
-        new_evals = evals[:first_mult - 1]
-
-        new_val = int(eval(" ".join(evals[first_mult - 1:first_mult + 2])))
-        new_evals.append(str(new_val))
-
-        new_evals += evals[first_mult + 2:]
-
-        evals = new_evals[:]
-
-    return int(evals[0])
+    # then we can just eval the mults
+    return int(eval("".join(evals)))
 
 
-def part_two(data):
+def part_two(data: List[str]) -> int:
     total = 0
     for line in data:
         parentheses_locs = find_parentheses(line)
