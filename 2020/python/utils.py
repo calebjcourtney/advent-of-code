@@ -1,6 +1,6 @@
 import os
 import re
-from typing import List
+from typing import List, Tuple
 
 from aocd.models import Puzzle
 
@@ -37,3 +37,20 @@ def re_split(val: str, chars: str) -> list:
 def special_split(line: str, patterns: List[str]) -> List[str]:
     # splits along any of the patters provided in the list
     return re.split("|".join(patterns), line)
+
+
+def add_vector(point: Tuple[int], vector: Tuple[int]) -> Tuple[int]:
+    return tuple(x + y for x, y in zip(point, vector))
+
+
+def find_parentheses(line: str) -> List[Tuple[int, int]]:
+    # finds matching parentheses in a string and returns the indices
+    stack = []
+    parentheses_locs = []
+    for index, character in enumerate(line):
+        if character == '(':
+            stack.append(index)
+        elif character == ')':
+            parentheses_locs.append((stack.pop(), index))
+
+    return parentheses_locs
