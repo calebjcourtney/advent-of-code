@@ -37,6 +37,16 @@ def process_part_one_seats(grid: List[str]) -> List[str]:
     return newgrid
 
 
+def part_one(grid: List[str]) -> int:
+    while True:
+        after = process_part_one_seats(grid)
+
+        if after == grid:
+            return ''.join(grid).count('#')
+
+        grid = after
+
+
 def part_two_adjacents(grid: List[str], row: int, col: int) -> List[str]:
     adj = []
     for x in (-1, 0, 1):
@@ -76,16 +86,6 @@ def process_part_two_seats(grid: List[str]) -> List[str]:
         newgrid.append(newrow)
 
     return newgrid
-
-
-def part_one(grid: List[str]) -> int:
-    while True:
-        after = process_part_one_seats(grid)
-
-        if after == grid:
-            return ''.join(grid).count('#')
-
-        grid = after
 
 
 def part_two(grid: List[str]) -> int:
