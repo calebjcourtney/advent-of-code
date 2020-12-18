@@ -36,9 +36,6 @@ def part_one(line: str) -> int:
 def eval_part_two(line: str) -> int:
     evals = line.split()
 
-    if len(evals) == 3:
-        return eval(line)
-
     # evaluate the plus signs first
     while "+" in evals:
         first_plus = evals.index("+")
