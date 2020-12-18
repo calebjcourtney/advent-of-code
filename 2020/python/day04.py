@@ -15,6 +15,10 @@ def is_valid_1(passport):
         return True
 
 
+def part_one(passports):
+    return sum(map(is_valid_1, passports))
+
+
 TERM_PARAMS = {
     "byr": lambda x: int(x) in range(1920, 2003),
     "iyr": lambda x: int(x) in range(2010, 2021),
@@ -28,6 +32,9 @@ TERM_PARAMS = {
 
 
 def is_valid_2(passport):
+    if not is_valid_1(passport):
+        return False
+
     terms = {}
     for term in passport.split():
         terms[term.split(':')[0].strip()] = term.split(':')[1].strip()
@@ -43,21 +50,13 @@ def is_valid_2(passport):
     return True
 
 
-data = get_data("04")
-passports = data.strip().split('\n\n')
+def part_two(passports):
+    return sum(map(is_valid_2, passports))
 
 
-count = 0
-for passport in passports:
-    if is_valid_1(passport):
-        count += 1
+if __name__ == '__main__':
+    data = get_data("04")
+    passports = data.strip().split('\n\n')
 
-print('part 1: {}'.format(count))
-
-
-count = 0
-for passport in passports:
-    if is_valid_1(passport) and is_valid_2(passport):
-        count += 1
-
-print('part 2: {}'.format(count))
+    print(part_one(passports))
+    print(part_two(passports))
