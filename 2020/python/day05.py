@@ -1,11 +1,14 @@
 from utils import get_line_data
 
 
-def part_one(seat_ids):
+from typing import List
+
+
+def part_one(seat_ids: List[int]) -> int:
     return max(seat_ids)
 
 
-def part_two(seat_ids):
+def part_two(seat_ids: List[int]) -> int:
     for x in range(min(seat_ids), max(seat_ids)):
         if x not in seat_ids:
             return x
