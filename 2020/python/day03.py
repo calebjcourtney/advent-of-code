@@ -1,9 +1,10 @@
 from utils import get_line_data
 
 from numpy import prod
+from typing import List
 
 
-def get_trees(data, right, down):
+def get_trees(data: List[str], right: int, down: int) -> int:
     trees = 0
     for x in range(len(data)):
         if (x * down <= len(data)) and (data[x * down][(x * right) % len(data[0])] == "#"):
