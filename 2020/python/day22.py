@@ -4,7 +4,7 @@ from typing import List, Tuple
 
 
 def part_one(p1_deck: List[int], p2_deck: List[int]) -> int:
-    while len(p1_deck) and len(p2_deck):
+    while p1_deck and p2_deck:
         p1_card = p1_deck.pop(0)
         p2_card = p2_deck.pop(0)
 
