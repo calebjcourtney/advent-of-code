@@ -1,36 +1,17 @@
 from typing import List
 
-from more_itertools import windowed
-
-from utils import get_int_data
+from utils import get_int_data, nwise
 
 
-def part_one(data: List[int]) -> int:
-    count = 0
-    for x, y in windowed(data, 2):
-        if x < y:
-            count += 1
-
-    return count
-
-
-def part_two(data: List[int]) -> int:
-    count = 0
-    first = data[:2]
-    for second in windowed(data[1:], 3):
-        if sum(first) < sum(second):
-            count += 1
-
-        first = second
-
-    return count
+def count_increasing(num_list: List):
+    return sum(x < y for x, y in nwise(num_list, 2))
 
 
 if __name__ == '__main__':
     data = get_int_data("01")
 
-    p1_result = part_one(data)
+    p1_result = count_increasing(data)
     print(p1_result)
 
-    p2_result = part_two(data)
+    p2_result = count_increasing([sum(x) for x in nwise(data, 3)])
     print(p2_result)

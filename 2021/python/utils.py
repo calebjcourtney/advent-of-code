@@ -1,7 +1,7 @@
 import os
 import re
 from typing import List, Tuple
-import collections
+from more_itertools import windowed
 
 from aocd.models import Puzzle
 
@@ -57,25 +57,5 @@ def find_parentheses(line: str) -> List[Tuple[int, int]]:
     return parentheses_locs
 
 
-def tee(iterable, n=2):
-    it = iter(iterable)
-    deques = [collections.deque() for i in range(n)]
-
-    def gen(mydeque):
-        while True:
-            if not mydeque:             # when the local deque is empty
-                try:
-                    newval = next(it)   # fetch a new value and
-                except StopIteration:
-                    return
-                for d in deques:        # load it to all the deques
-                    d.append(newval)
-            yield mydeque.popleft()
-    return tuple(gen(d) for d in deques)
-
-
-def pairwise(iterable, n=2):
-    "s -> (s0,s1), (s1,s2), (s2, s3), ..."
-    a, b = tee(iterable, n)
-    next(b, None)
-    return zip(a, b)
+def nwise(iterable, n = 2):
+    return windowed(iterable, n)
