@@ -1,43 +1,48 @@
 from utils import get_line_data
 
 
+class Instruction:
+    def __init__(self, row):
+
+        info = row.split()
+        self.direction = info[0]
+        self.magnitude = int(info[1])
+
+
+def part_one(instructions):
+    horizontal = 0
+    vertical = 0
+    for instruction in instructions:
+        if "forward" == instruction.direction:
+            horizontal += instruction.magnitude
+
+        elif "down" == instruction.direction:
+            vertical += instruction.magnitude
+        elif "up" == instruction.direction:
+            vertical -= instruction.magnitude
+
+    return horizontal * vertical
+
+
 class Submarine:
     def __init__(self):
         self.horizontal = 0
         self.vertical = 0
         self.aim = 0
 
-    def add_instruction(self, line):
-        direction, magnitude = line.split()
-        magnitude = int(magnitude)
+    def add_instruction(self, instruction):
+        if "forward" == instruction.direction:
+            self.horizontal += instruction.magnitude
+            self.vertical += self.aim * instruction.magnitude
 
-        if "forward" == direction:
-            self.horizontal += int(line.split()[1])
-            self.vertical += self.aim * int(line.split()[1])
+        elif "down" == instruction.direction:
+            self.aim += instruction.magnitude
 
-        elif "down" == direction:
-            self.aim += int(line.split()[1])
-
-        elif "up" == direction:
-            self.aim -= int(line.split()[1])
+        elif "up" == instruction.direction:
+            self.aim -= instruction.magnitude
 
     def position(self):
         return self.horizontal * self.vertical
-
-
-def part_one(data):
-    horizontal = 0
-    vertical = 0
-    for line in data:
-        if "forward" in line:
-            horizontal += int(line.split()[1])
-
-        elif "down" in line:
-            vertical += int(line.split()[1])
-        elif "up" in line:
-            vertical -= int(line.split()[1])
-
-    return horizontal * vertical
 
 
 def part_two(data):
@@ -50,6 +55,7 @@ def part_two(data):
 
 if __name__ == '__main__':
     data = get_line_data("02")
+    data = [Instruction(line) for line in data]
 
     p1_result = part_one(data)
     print(p1_result)
