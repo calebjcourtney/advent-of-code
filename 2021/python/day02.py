@@ -1,7 +1,7 @@
 from utils import get_line_data
 
 
-class Position:
+class Submarine:
     def __init__(self):
         self.horizontal = 0
         self.vertical = 0
@@ -21,6 +21,9 @@ class Position:
         elif "up" == direction:
             self.aim -= int(line.split()[1])
 
+    def position(self):
+        return self.horizontal * self.vertical
+
 
 def part_one(data):
     horizontal = 0
@@ -38,11 +41,11 @@ def part_one(data):
 
 
 def part_two(data):
-    position = Position()
+    submarine = Submarine()
     for line in data:
-        position.add_instruction(line)
+        submarine.add_instruction(line)
 
-    return position.horizontal * position.vertical
+    return submarine.position()
 
 
 if __name__ == '__main__':
