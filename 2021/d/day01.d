@@ -23,11 +23,6 @@ void main()
 {
     int[] lineData = readIntData();
 
-    auto part1 = sum(zip(lineData, lineData.dropOne).map!"a[0] < a[1]");
-    writeln(part1);
-
-    auto summedData = zip(lineData, lineData.dropOne, lineData.dropOne.dropOne).map!"a[0] + a[1] + a[2]";
-
-    auto part2 = sum(zip(summedData, summedData.dropOne).map!"a[0] < a[1]");
-    writeln(part2);
+    writeln(sum(zip(lineData, lineData.dropOne).map!"a[0] < a[1]"));
+    writeln(sum(zip(lineData, lineData[3 .. $]).map!"a[0] < a[1]"));
 }
