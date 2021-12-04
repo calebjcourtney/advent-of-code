@@ -1,13 +1,3 @@
-/*
-
-
-def part_two(data):
-    oxygen = filter_data(data, False)
-    co2 = filter_data(data, True)
-
-    return int(oxygen, 2) * int(co2, 2)
-*/
-
 import std.stdio;
 import std.string;
 import std.conv;
