@@ -7,7 +7,7 @@ class Board:
         for row in data.split("\n"):
             self.data.append(list(map(int, row.split())))
 
-        self.guesses = [[False for _ in range(len(self.data[0]))] for _ in range(len(self.data))]
+        self.guesses = [[False for _ in range(5)] for _ in range(5)]
 
     def has_number(self, num):
         for x, row in enumerate(self.data):
