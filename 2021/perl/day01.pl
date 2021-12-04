@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
-# inspired by a friend's work - John Hunt
-# modified to remove the sums in part 2
+# inspired by a friend's work, who did part 1
+# modified to include part 2, though there's not much different
 
 use strict;
 
