@@ -2,11 +2,9 @@ from utils import get_data
 
 
 class Board:
-    def __init__(self, arg):
-        self.arg = arg
-
+    def __init__(self, data):
         self.data = []
-        for row in arg.split("\n"):
+        for row in data.split("\n"):
             self.data.append(list(map(int, row.split())))
 
         self.guesses = [[False for _ in range(len(self.data[0]))] for _ in range(len(self.data))]
@@ -38,41 +36,10 @@ class Board:
 
         return c
 
-
-def part_one(boards, instructions):
-    guessed_numbers = set()
-    for number in instructions:
-        guessed_numbers.add(number)
-        for board in boards:
-            if board.has_number(number) and board.is_bingo():
-
-                nums = board.bingo_data()
-
-                return nums * number
-
-
-def part_two(boards, instructions):
-    i = 0
-
-    # solve all the boards but the last one
-    while len(boards) > 1:
-        drop_boards = []
-        for bi, board in enumerate(boards):
-            if board.has_number(instructions[i]) and board.is_bingo():
-                drop_boards.append(bi)
-
-        boards = [board for c, board in enumerate(boards) if c not in drop_boards]
-
-        i += 1
-
-    # solve the last board.
-    board = boards[0]
-
-    for c in range(i, len(instructions)):
-        if board.has_number(instructions[c]) and board.is_bingo():
-            sums = board.bingo_data()
-
-            return sums * instructions[c]
+    def solve(self, sequence):
+        for i, number in enumerate(sequence):
+            if self.has_number(number) and self.is_bingo():
+                return i, number * self.bingo_data()
 
 
 if __name__ == '__main__':
@@ -85,8 +52,10 @@ if __name__ == '__main__':
         b = Board(board)
         boards.append(b)
 
-    p1_result = part_one(boards, numbers)
+    solved_boards = sorted([board.solve(numbers) for board in boards], key = lambda board: board[0])
+
+    p1_result = solved_boards[0][1]
     print(p1_result)
 
-    p2_result = part_two(boards, numbers)
+    p2_result = solved_boards[-1][1]
     print(p2_result)
