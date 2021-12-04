@@ -59,3 +59,9 @@ def find_parentheses(line: str) -> List[Tuple[int, int]]:
 
 def nwise(iterable, n = 2):
     return windowed(iterable, n)
+
+
+# https://stackoverflow.com/questions/312443/how-do-you-split-a-list-into-evenly-sized-chunks
+def chunks(lst, n):
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
