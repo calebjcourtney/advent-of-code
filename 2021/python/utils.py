@@ -65,3 +65,11 @@ def nwise(iterable, n = 2):
 def chunks(lst, n):
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
+
+
+def array_left_rotate(lst, n = 1):
+    return lst[n:] + lst[:n]
+
+
+def array_right_rotate(lst, n = 1):
+    return lst[-n:] + lst[:-n]
