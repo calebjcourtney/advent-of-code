@@ -3,7 +3,7 @@ from utils import get_data
 
 def rotate(fish_count, days):
     for _ in range(days):
-        fish_count = [*fish_count[1:], fish_count[0]]
+        fish_count = fish_count[1:] + [fish_count[0]]
         fish_count[6] += fish_count[-1]
 
     return sum(fish_count)
