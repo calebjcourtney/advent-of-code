@@ -3,12 +3,12 @@ from utils import get_data
 
 def part_one(data):
     median = sorted(data)[int(len(data) / 2)]
-    return sum((abs(num - median) for num in data))
+    return min(sum((abs(num - x) for num in data)) for x in range(median - 1, median + 2))
 
 
 def part_two(data):
     mean = int(sum(data) / len(data))
-    return sum(sum(range(abs(num - mean) + 1)) for num in data)
+    return min(sum(sum(range(abs(num - x) + 1)) for num in data) for x in range(mean - 1, mean + 2))
 
 
 if __name__ == '__main__':
