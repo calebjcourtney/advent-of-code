@@ -2,29 +2,13 @@ from utils import get_data
 
 
 def part_one(data):
-    min_distance = None
-    for x in range(min(data), max(data) + 1):
-        cur_dist = 0
-        for num in data:
-            cur_dist += abs(num - x)
-
-        if min_distance is None or cur_dist < min_distance:
-            min_distance = cur_dist
-
-    return min_distance
+    median = sorted(data)[int(len(data) / 2)]
+    return sum((abs(num - median) for num in data))
 
 
 def part_two(data):
-    min_distance = None
-    for x in range(min(data), max(data) + 1):
-        cur_dist = 0
-        for num in data:
-            cur_dist += sum(range(abs(num - x) + 1))
-
-        if min_distance is None or cur_dist < min_distance:
-            min_distance = cur_dist
-
-    return min_distance
+    mean = int(sum(data) / len(data))
+    return sum(sum(range(abs(num - mean) + 1)) for num in data)
 
 
 if __name__ == '__main__':
