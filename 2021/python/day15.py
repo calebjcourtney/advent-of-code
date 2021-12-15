@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
     for y in range(len(expanded_data)):
         for x in range(len(expanded_data[0])):
-            while expanded_data[y][x] > 9:
+            if expanded_data[y][x] > 9:
                 expanded_data[y][x] -= 9
 
     print(f"part two: {solve(expanded_data)}")
