@@ -3,19 +3,10 @@ import re
 from typing import List, Tuple
 from more_itertools import windowed
 
-from aocd.models import Puzzle
-
 
 def get_data(day: str) -> str:
     input_dir = "/".join(os.getcwd().split("/")[:-1])
-    try:
-        data = open("{}/inputs/input{}.txt".format(input_dir, day), "r").read().strip()
-    except FileNotFoundError:
-        puzzle = Puzzle(year=2021, day=int(day))
-        with open("{}/inputs/input{}.txt".format(input_dir, day), "w+") as saveFile:
-            saveFile.write(puzzle.input_data)
-
-        data = open("{}/inputs/input{}.txt".format(input_dir, day), "r").read().strip()
+    data = open("{}/inputs/input{}.txt".format(input_dir, day), "r").read().strip()
 
     return data
 
@@ -57,7 +48,7 @@ def find_parentheses(line: str) -> List[Tuple[int, int]]:
     return parentheses_locs
 
 
-def nwise(iterable, n = 2):
+def nwise(iterable, n=2):
     return windowed(iterable, n)
 
 
@@ -67,9 +58,9 @@ def chunks(lst, n):
         yield lst[i:i + n]
 
 
-def array_left_rotate(lst, n = 1):
+def array_left_rotate(lst, n=1):
     return lst[n:] + lst[:n]
 
 
-def array_right_rotate(lst, n = 1):
+def array_right_rotate(lst, n=1):
     return lst[-n:] + lst[:-n]

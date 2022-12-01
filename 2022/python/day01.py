@@ -1,10 +1,18 @@
-data = open("../inputs/input01.txt", "r").read()
+from utils import get_data
+data = get_data(1)
 
-elves = data.split("\n\n")
 
-weights = [sum(map(int, elf.split())) for elf in elves]
-# part 1
-print(max(weights))
+def part_one(weights):
+    return max(weights)
 
-# part 2
-print(sum(sorted(weights)[-3:]))
+
+def part_two(weights):
+    return sum(sorted(weights)[-3:])
+
+
+if __name__ == '__main__':
+    elves = data.split("\n\n")
+    weights = [sum(map(int, elf.split())) for elf in elves]
+
+    print(part_one(weights))
+    print(part_two(weights))
