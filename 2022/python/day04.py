@@ -22,7 +22,7 @@ def part_two(data):
     c = 0
     for line in data:
         s1, s2 = map(Section, line.split(","))
-        if len(s1.seats & s2.seats):
+        if s1.seats & s2.seats:
             c += 1
 
     return c
