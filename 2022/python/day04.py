@@ -7,32 +7,22 @@ class Section():
         self.seats = set([x for x in range(self.start, self.end + 1)])
 
 
-def part_one(data):
-    c = 0
-    for line in data:
-        s1, s2 = map(Section, line.split(","))
-
-        if len(s1.seats & s2.seats) == min(len(s1.seats), len(s2.seats)):
-            c += 1
-
-    return c
+def parse_line(line):
+    s1, s2 = map(Section, line.split(","))
+    return s1, s2
 
 
-def part_two(data):
-    c = 0
-    for line in data:
-        s1, s2 = map(Section, line.split(","))
-        if s1.seats & s2.seats:
-            c += 1
+def part_one(s1, s2):
+    return s1.seats >= s2.seats or s2.seats >= s1.seats
 
-    return c
+
+def part_two(s1, s2):
+    return bool(s1.seats & s2.seats)
 
 
 if __name__ == '__main__':
     data = get_line_data("04")
+    data = [parse_line(line) for line in data]
 
-    p1_result = part_one(data)
-    print(p1_result)
-
-    p2_result = part_two(data)
-    print(p2_result)
+    print(sum(part_one(s1, s2) for (s1, s2) in data))
+    print(sum(part_two(s1, s2) for (s1, s2) in data))
