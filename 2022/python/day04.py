@@ -3,7 +3,7 @@ from utils import get_line_data
 
 class Section():
     def __init__(self, arg):
-        self.start, self.end = tuple(map(int, arg.split("-")))
+        self.start, self.end = map(int, arg.split("-"))
         self.seats = set([x for x in range(self.start, self.end + 1)])
 
 
