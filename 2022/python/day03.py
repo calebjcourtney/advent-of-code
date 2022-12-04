@@ -5,8 +5,7 @@ import string
 
 
 def val(x):
-    mapping = string.ascii_lowercase + string.ascii_uppercase
-    return mapping.index(x) + 1
+    return string.ascii_letters.index(x) + 1
 
 
 def overlap_char(line):

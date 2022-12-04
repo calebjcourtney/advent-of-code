@@ -35,17 +35,21 @@ def add_vector(point: Tuple[int], vector: Tuple[int]) -> Tuple[int]:
     return tuple(x + y for x, y in zip(point, vector))
 
 
-def find_parentheses(line: str) -> List[Tuple[int, int]]:
-    # finds matching parentheses in a string and returns the indices
+def find_corresponding_chars(line: str, start: str, end: str) -> List[Tuple[int, int]]:
+    # finds matching figures in a string and returns the indices
     stack = []
     parentheses_locs = []
     for index, character in enumerate(line):
-        if character == '(':
+        if character == start:
             stack.append(index)
-        elif character == ')':
+        elif character == end:
             parentheses_locs.append((stack.pop(), index))
 
     return parentheses_locs
+
+
+def find_parentheses(line: str) -> List[Tuple[int, int]]:
+    return find_corresponding_chars(line, "(", ")")
 
 
 def nwise(iterable, n=2):
