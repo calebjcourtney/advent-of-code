@@ -12,17 +12,23 @@ def parse_line(line):
     return s1, s2
 
 
-def part_one(s1, s2):
-    return s1.seats >= s2.seats or s2.seats >= s1.seats
+def part_one(data):
+    return sum(
+        s1.seats >= s2.seats or s2.seats >= s1.seats
+        for (s1, s2) in data
+    )
 
 
 def part_two(s1, s2):
-    return bool(s1.seats & s2.seats)
+    return sum(
+        bool(s1.seats & s2.seats)
+        for (s1, s2) in data
+    )
 
 
 if __name__ == '__main__':
     data = get_line_data("04")
     data = [parse_line(line) for line in data]
 
-    print(sum(part_one(s1, s2) for (s1, s2) in data))
-    print(sum(part_two(s1, s2) for (s1, s2) in data))
+    print(part_one(data))
+    print(part_two(data))
