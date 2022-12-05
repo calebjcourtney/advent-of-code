@@ -6,7 +6,7 @@ from more_itertools import windowed
 
 def get_data(day: str) -> str:
     input_dir = "/".join(os.getcwd().split("/")[:-1])
-    data = open("{}/inputs/input{}.txt".format(input_dir, day), "r").read().strip()
+    data = open("{}/inputs/input{}.txt".format(input_dir, day), "r").read()
 
     return data
 
