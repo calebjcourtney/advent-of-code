@@ -68,3 +68,25 @@ def array_left_rotate(lst, n=1):
 
 def array_right_rotate(lst, n=1):
     return lst[-n:] + lst[:-n]
+
+
+def rotate_text(text: str) -> str:
+    """
+    Assuming a multi-line, rectangular blob of text, rotate 90 degrees
+    """
+    # each row is the same length
+    rows = [line for line in text.split("\n")]
+    max_row = max([len(x) for x in rows])
+    for row in rows:
+        assert len(row) == max_row
+
+    row_count = len(text.split("\n"))
+    col_count = len(text.split("\n")[0])
+
+    output = []
+    for c in range(col_count):
+        temp = ""
+        for r in range(row_count):
+            temp += rows[r][c]
+
+    return "\n".join(output)
