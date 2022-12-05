@@ -4,19 +4,6 @@ import re
 from utils import get_data
 
 
-def parse_crate_from_line(line: str) -> List[str]:
-    results = re.findall(r'\[(\w|\s)\]', line)
-    return [
-        x.strip("[").strip("]")
-        for x in results
-    ]
-
-
-def parse_instructions(line: str) -> Tuple[int, int, int]:
-    results = re.findall(r'\d+', line)
-    return tuple(map(int, results))
-
-
 class Stack(object):
     def __init__(self, crates):
         self.crates = crates
@@ -52,6 +39,19 @@ def build_stacks(crate_data: str) -> Dict[int, Stack]:
     crates = {index: Stack(row) for index, row in enumerate(output, 1)}
 
     return crates
+
+
+def parse_crate_from_line(line: str) -> List[str]:
+    results = re.findall(r'\[(\w|\s)\]', line)
+    return [
+        x.strip("[").strip("]")
+        for x in results
+    ]
+
+
+def parse_instructions(line: str) -> Tuple[int, int, int]:
+    results = re.findall(r'\d+', line)
+    return tuple(map(int, results))
 
 
 def part_one(stacks: Dict[int, Stack], instructions: str) -> str:
