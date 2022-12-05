@@ -4,24 +4,6 @@ import re
 from utils import get_data
 
 
-def parse_crate_data(crate_data):
-    rows = len(crate_data.split("\n"))
-    columns = len(crate_data.split("\n")[0])
-
-    output = []
-    for c in range(columns):
-        temp = ""
-        for r in range(rows):
-            temp += crate_data.split("\n")[r][c]
-
-        if temp[-1].isnumeric():
-            output.append(temp.strip()[::-1][1:])
-
-    crates = {index: Stack(row) for index, row in enumerate(output, 1)}
-
-    return crates
-
-
 def parse_crate_from_line(line: str) -> List[str]:
     results = re.findall(r'\[(\w|\s)\]', line)
     return [
@@ -54,16 +36,22 @@ class Stack(object):
         return self.crates[-1]
 
 
-def build_stacks(stack_data) -> Dict[int, Stack]:
-    stacks = {k: Stack([]) for k in range(1, 10)}
-    for line in stack_data.split("\n"):
-        crates = parse_crate_from_line(line)
-        for index, crate in enumerate(crates, 1):
-            if crate == " ":
-                continue
-            stacks[index].insert(crate)
+def build_stacks(crate_data: str) -> Dict[int, Stack]:
+    rows = len(crate_data.split("\n"))
+    columns = len(crate_data.split("\n")[0])
 
-    return stacks
+    output = []
+    for c in range(columns):
+        temp = ""
+        for r in range(rows):
+            temp += crate_data.split("\n")[r][c]
+
+        if temp[-1].isnumeric():
+            output.append(temp.strip()[::-1][1:])
+
+    crates = {index: Stack(row) for index, row in enumerate(output, 1)}
+
+    return crates
 
 
 def part_one(stacks: Dict[int, Stack], instructions: str) -> str:
@@ -91,13 +79,11 @@ if __name__ == '__main__':
         parse_instructions(line)
         for line in instructions.strip().split("\n")
     ]
-    stacks = parse_crate_data(stack_data)
-    # stacks = build_stacks(stack_data)
+    stacks = build_stacks(stack_data)
 
     p1_result = part_one(stacks, instructions)
     print(p1_result)
 
-    # stacks = build_stacks(stack_data)
-    stacks = parse_crate_data(stack_data)
+    stacks = build_stacks(stack_data)
     p2_result = part_two(stacks, instructions)
     print(p2_result)
