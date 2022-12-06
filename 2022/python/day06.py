@@ -1,7 +1,7 @@
 from utils import get_data
 
 
-def solve(data, depth):
+def solve(data: str, depth: int) -> int:
     count = 0
     for count, record in enumerate(data, 1):
         if count >= depth:
