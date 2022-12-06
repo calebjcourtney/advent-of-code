@@ -1,29 +1,26 @@
-from typing import List, Tuple
+import re
+from typing import List, Tuple, Set
 
 from utils import get_line_data
 
 
-class Section():
-    def __init__(self, arg: str):
-        self.start, self.end = map(int, arg.split("-"))
-        self.seats = set([x for x in range(self.start, self.end + 1)])
+def parse_line(line: str) -> Tuple[Set, Set]:
+    s1, e1, s2, e2 = map(int, re.findall(r"\d+", line))
+    sec1 = set([x for x in range(s1, e1 + 1)])
+    sec2 = set([x for x in range(s2, e2 + 1)])
+    return sec1, sec2
 
 
-def parse_line(line: str) -> Tuple[Section, Section]:
-    s1, s2 = map(Section, line.split(","))
-    return s1, s2
-
-
-def part_one(data: List[Tuple[Section, Section]]) -> int:
+def part_one(data: List[Tuple[Set, Set]]) -> int:
     return sum(
-        s1.seats >= s2.seats or s2.seats >= s1.seats
+        s1 >= s2 or s2 >= s1
         for (s1, s2) in data
     )
 
 
-def part_two(s1: Section, s2: Section) -> int:
+def part_two(data: List[Tuple[Set, Set]]) -> int:
     return sum(
-        bool(s1.seats & s2.seats)
+        bool(s1 & s2)
         for (s1, s2) in data
     )
 
