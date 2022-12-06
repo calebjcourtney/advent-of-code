@@ -1,30 +1,19 @@
 from utils import get_data
 
 
-def part_one(data):
+def solve(data, depth):
     count = 0
-    for c in data:
-        count += 1
-        if count >= 4:
-            if len(set(data[count - 4:count])) == 4:
-                return count
-
-
-def part_two(data):
-    count = 0
-    for c in data:
-        count += 1
-
-        if count >= 14:
-            if len(set(data[count - 14:count])) == 14:
+    for count, record in enumerate(data, 1):
+        if count >= depth:
+            if len(set(data[count - depth:count])) == depth:
                 return count
 
 
 if __name__ == '__main__':
     data = get_data("06")
 
-    p1_result = part_one(data)
+    p1_result = solve(data, 4)
     print(p1_result)
 
-    p2_result = part_two(data)
+    p2_result = solve(data, 14)
     print(p2_result)
