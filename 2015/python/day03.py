@@ -1,8 +1,4 @@
-from utils import get_data, get_line_data, get_int_data
-
-import numpy
-import itertools
-import collections
+from utils import get_data
 
 
 class Point:
