@@ -3,10 +3,19 @@ import re
 from typing import List, Tuple
 from more_itertools import windowed
 
+from aocd.models import Puzzle
+
 
 def get_data(day: str) -> str:
     input_dir = "/".join(os.getcwd().split("/")[:-1])
-    data = open("{}/inputs/input{}.txt".format(input_dir, day), "r").read().rstrip()
+    try:
+        data = open("{}/inputs/input{}.txt".format(input_dir, day), "r").read().rstrip()
+    except FileNotFoundError:
+        puzzle = Puzzle(year=2015, day=int(day))
+        with open("{}/inputs/input{}.txt".format(input_dir, day), "w+") as saveFile:
+            saveFile.write(puzzle.input_data)
+
+        data = open("{}/inputs/input{}.txt".format(input_dir, day), "r").read().rstrip()
 
     return data
 
