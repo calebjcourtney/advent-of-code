@@ -34,6 +34,9 @@ def part_one(data):
 
 def part_two(data):
     total = 1e9
+    max_used = 70000000 - 30000000
+    total_used = data['/']
+    need_to_free = total_used - max_used
     for k, v in data.items():
         if v >= need_to_free:
             total = min(total, v)
@@ -44,9 +47,6 @@ def part_two(data):
 if __name__ == '__main__':
     data = get_line_data("07")
     data = parse_data(data)
-    max_used = 70000000 - 30000000
-    total_used = data['/']
-    need_to_free = total_used - max_used
 
     print(part_one(data))
     print(part_two(data))
