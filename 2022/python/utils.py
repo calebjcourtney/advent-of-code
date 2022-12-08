@@ -3,10 +3,19 @@ import re
 from typing import List, Tuple
 from more_itertools import windowed
 
+from aocd.models import Puzzle
+
 
 def get_data(day: str) -> str:
     input_dir = "/".join(os.getcwd().split("/")[:-1])
-    data = open("{}/inputs/input{}.txt".format(input_dir, day), "r").read()
+    try:
+        data = open("{}/inputs/input{}.txt".format(input_dir, day), "r").read().rstrip()
+    except FileNotFoundError:
+        puzzle = Puzzle(year=2022, day=int(day))
+        with open("{}/inputs/input{}.txt".format(input_dir, day), "w+") as saveFile:
+            saveFile.write(puzzle.input_data)
+
+        data = open("{}/inputs/input{}.txt".format(input_dir, day), "r").read().rstrip()
 
     return data
 
@@ -90,3 +99,9 @@ def rotate_text(text: str) -> str:
             temp += rows[r][c]
 
     return "\n".join(output)
+
+
+def get_nums(line, signed=True):
+    # gets all the numbers in a line of text
+    pattern = re.compile(r"-?\d+") if signed else re.compile(r"\d+")
+    return pattern.findall(line)
