@@ -7,9 +7,6 @@ class Grid:
     def __init__(self, data):
         self.data = data
 
-    def __repr__(self) -> str:
-        return "\n".join([" ".join(map(str, row)) for row in self.data])
-
     def north_visible(self, x: int, y: int) -> bool:
         r = [self.data[yi][x] for yi in range(y)]
         return True if not r else self.data[y][x] > max(r)
@@ -99,8 +96,5 @@ if __name__ == '__main__':
     data = get_line_data("08")
     grid = Grid([list(map(int, row)) for row in data])
 
-    p1_result = grid.visible_trees()
-    print(p1_result)
-
-    p2_result = grid.best_scenic_score()
-    print(p2_result)
+    print(grid.visible_trees())
+    print(grid.best_scenic_score())
