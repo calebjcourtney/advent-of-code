@@ -99,3 +99,9 @@ def rotate_text(text: str) -> str:
             temp += rows[r][c]
 
     return "\n".join(output)
+
+
+def get_nums(line, signed=True, out_type=int):
+    # gets all the numbers in a line of text
+    pattern = re.compile(r"-?\d+") if signed else re.compile(r"\d+")
+    return map(out_type, pattern.findall(line))
