@@ -2,6 +2,13 @@ from typing import Set, Tuple
 
 from utils import get_line_data
 
+DIRECTIONS = {
+    "U": (0, 1),
+    "D": (0, -1),
+    "R": (1, 0),
+    "L": (-1, 0)
+}
+
 
 def parse_line(line):
     direction, count = line.strip().split()
@@ -20,18 +27,7 @@ class Rope:
         self.tail_visits: Set[Tuple[int, int]] = set((0, 0))
 
     def move_head(self, direction):
-        if direction == "U":
-            x, y = 0, 1
-
-        elif direction == "D":
-            x, y = 0, -1
-
-        elif direction == "R":
-            x, y = 1, 0
-
-        elif direction == "L":
-            x, y = -1, 0
-
+        x, y = DIRECTIONS[direction]
         self.knots[0].x += x
         self.knots[0].y += y
 
