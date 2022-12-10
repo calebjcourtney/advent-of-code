@@ -1,7 +1,9 @@
+from typing import Tuple, List
+
 from utils import get_line_data
 
 
-def parse_line(line):
+def parse_line(line) -> Tuple[str, int]:
     instructions = line.split()
     statement = instructions[0]
     amount = None if len(instructions) == 1 else int(instructions[1])
@@ -9,7 +11,7 @@ def parse_line(line):
     return statement, amount
 
 
-def parse_instructions(data):
+def parse_instructions(data: List[str]) -> List[int]:
     x = 1
     output = [0]
 
@@ -25,11 +27,11 @@ def parse_instructions(data):
     return output
 
 
-def part_one(instructions):
+def part_one(instructions: List[int]) -> int:
     return sum(x * y for x, y in enumerate(instructions) if x % 40 == 20)
 
 
-def part_two(instructions):
+def part_two(instructions: List[int]) -> None:
     for i in range(1, len(instructions), 40):
         for j in range(40):
             print(end="##" if abs(instructions[i + j] - j) <= 1 else "  ")
@@ -40,7 +42,5 @@ if __name__ == '__main__':
     data = get_line_data("10")
     instructions = parse_instructions(data)
 
-    p1_result = part_one(instructions)
-    print(p1_result)
-
+    print(part_one(instructions))
     part_two(instructions)
