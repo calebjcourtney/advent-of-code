@@ -1,7 +1,9 @@
+import operator
 import os
 import re
 from typing import List, Tuple
 from more_itertools import windowed
+from functools import reduce
 
 from aocd.models import Puzzle
 
@@ -101,7 +103,11 @@ def rotate_text(text: str) -> str:
     return "\n".join(output)
 
 
-def get_nums(line, signed=True):
+def get_nums(line, signed=True, num_type=int):
     # gets all the numbers in a line of text
     pattern = re.compile(r"-?\d+") if signed else re.compile(r"\d+")
-    return pattern.findall(line)
+    return list(map(num_type, pattern.findall(line)))
+
+
+def mult(lst: list):
+    return reduce(operator.mul, lst, 1)
