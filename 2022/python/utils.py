@@ -111,3 +111,31 @@ def get_nums(line, signed=True, num_type=int):
 
 def mult(lst: list):
     return reduce(operator.mul, lst, 1)
+
+
+class Point:
+    """Simple 2-dimensional point."""
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __add__(self, other):
+        return Point(self.x + other.x, self.y + other.y)
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
+    def __hash__(self):
+        return hash(tuple((self.x, self.y)))
+
+    def neighbors(self):
+        return [self + p for p in DIRS]
+
+
+DIRS = [
+    Point(0, 1),   # north
+    Point(1, 0),   # east
+    Point(0, -1),  # south
+    Point(-1, 0),  # west
+]
