@@ -1,9 +1,8 @@
-import operator
 import os
 import re
 from typing import List, Tuple, NamedTuple
 from more_itertools import windowed
-from functools import reduce
+import math
 
 from aocd.models import Puzzle
 
@@ -110,7 +109,7 @@ def get_nums(line, signed=True, num_type=int):
 
 
 def mult(lst: list):
-    return reduce(operator.mul, lst, 1)
+    return math.prod(lst)
 
 
 class Point(NamedTuple):
