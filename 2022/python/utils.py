@@ -1,7 +1,7 @@
 import operator
 import os
 import re
-from typing import List, Tuple
+from typing import List, Tuple, NamedTuple
 from more_itertools import windowed
 from functools import reduce
 
@@ -113,24 +113,42 @@ def mult(lst: list):
     return reduce(operator.mul, lst, 1)
 
 
-class Point:
-    """Simple 2-dimensional point."""
-
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+class Point(NamedTuple):
+    x: int
+    y: int
 
     def __add__(self, other):
         return Point(self.x + other.x, self.y + other.y)
 
+    def __sub__(self, other):
+        return Point(self.x - other.x, self.y - other.y)
+
+    def __mul__(self, n):
+        return Point(self.x * n, self.y * n)
+
+    def __div__(self, n):
+        return Point(self.x / n, self.y / n)
+
+    def __neg__(self):
+        return Point(-self.x, -self.y)
+
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y
 
-    def __hash__(self):
-        return hash(tuple((self.x, self.y)))
+    def __ne__(self, other):
+        return not self == other
+
+    def __str__(self):
+        return "({}, {})".format(self.x, self.y)
+
+    def __repr__(self):
+        return "Point({}, {})".format(self.x, self.y)
 
     def neighbors(self):
         return [self + p for p in DIRS]
+
+    def neighbors_8(self):
+        return [self + p for p in DIRS_8]
 
 
 DIRS = [
@@ -138,4 +156,16 @@ DIRS = [
     Point(1, 0),   # east
     Point(0, -1),  # south
     Point(-1, 0),  # west
+]
+
+
+DIRS_8 = [
+    Point(0, 1),    # N
+    Point(1, 1),    # NE
+    Point(1, 0),    # E
+    Point(1, -1),   # SE
+    Point(0, -1),   # S
+    Point(-1, -1),  # SW
+    Point(-1, 0),   # W
+    Point(-1, 1),   # NW
 ]
