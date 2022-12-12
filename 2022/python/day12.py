@@ -1,21 +1,16 @@
-from utils import get_line_data, Point
+from utils import get_line_data, parse_grid
 
 from collections import deque, defaultdict
 
 
 class Grid:
     def __init__(self, lines):
-        self.board = {}
-        for y, line in enumerate(lines):
-            for x, c in enumerate(line.strip()):
-                if c == 'S':
-                    self.end = Point(x, y)
-                    self.board[self.end] = 'a'
-                elif c == 'E':
-                    self.start = Point(x, y)
-                    self.board[self.start] = 'z'
-                else:
-                    self.board[Point(x, y)] = c
+        self.board = parse_grid(lines)
+        self.end = [key for key, value in self.board.items() if value == "S"][0]
+        self.board[self.end] = "a"
+
+        self.start = [key for key, value in self.board.items() if value == "E"][0]
+        self.board[self.start] = "z"
 
         self.steps = defaultdict(lambda: float('inf'))
         self.compute_shortest_paths(end=self.end)

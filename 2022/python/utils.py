@@ -162,3 +162,20 @@ DIRS_8 = [
     Point(-1, 0),   # W
     Point(-1, 1),   # NW
 ]
+
+
+def parse_grid(data):
+    # convert the data to a grid format
+    grid = {}
+    if isinstance(data, list):
+        for y in range(len(data)):
+            for x in range(len(data[y])):
+                grid[Point(x, y)] = data[y][x]
+
+    elif isinstance(data, str) and "\n" in data:
+        lines = data.split("\n")
+        for y in range(len(lines)):
+            for x in range(len(lines[x])):
+                grid[Point(x, y)] = lines[y][x]
+
+    return grid
