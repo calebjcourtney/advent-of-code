@@ -1,6 +1,6 @@
 from utils import get_line_data, Point
 
-from collections import deque
+from collections import deque, defaultdict
 
 
 class Grid:
@@ -17,7 +17,7 @@ class Grid:
                 else:
                     self.board[Point(x, y)] = c
 
-        self.steps = {}
+        self.steps = defaultdict(lambda: float('inf'))
         self.compute_shortest_paths(end=self.end)
 
     def compute_shortest_paths(self, end=None):
@@ -34,10 +34,6 @@ class Grid:
                 if (ord(self.board[n]) + 1 >= ord(self.board[current])):
                     self.steps[n] = depth + 1
                     queue.append((n, depth + 1))
-
-        for point in self.board.keys():
-            if point not in self.steps:
-                self.steps[point] = float('inf')
 
 
 if __name__ == '__main__':
