@@ -75,7 +75,7 @@ if __name__ == '__main__':
     data = get_data("13")
     data = parse_data(data)
 
-    print(sum(index for index, (p1, p2) in enumerate(data, 1) if compare(p1, p2) == -1))
+    print(sum(index for index, (p1, p2) in enumerate(data, 1) if compare(p1, p2) < 1))
 
     p2_result = part_two(data)
     print(p2_result)
