@@ -40,8 +40,6 @@ def compare_lists(p1: list, p2: list) -> int:
     if len(p1) > len(p2):
         return 1
 
-    return 0
-
 
 def compare(p1: Any, p2: Any) -> int:
     if isinstance(p1, int) and isinstance(p2, int):
