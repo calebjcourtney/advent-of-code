@@ -1,6 +1,7 @@
 import json
 from typing import List, Tuple, Any
 from functools import cmp_to_key
+import math
 
 from utils import get_data
 
@@ -63,12 +64,7 @@ def part_two(data: List[Tuple[Any]]) -> int:
         flat_data.append(p2)
 
     flat_data.sort(key=cmp_to_key(lambda p1, p2: compare(p1, p2)))
-    output = 1
-    for index, p in enumerate(flat_data, 1):
-        if p == [[2]] or p == [[6]]:
-            output *= index
-
-    return output
+    return math.prod(index for index, p in enumerate(flat_data, 1) if p in [[[2]], [[6]]])
 
 
 if __name__ == '__main__':
