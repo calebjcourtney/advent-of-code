@@ -143,6 +143,25 @@ class Point(NamedTuple):
     def neighbors_8(self):
         return [self + p for p in DIRS_8]
 
+    def line(self, point):
+        output = []
+        if self.x != point.x:
+            step = (self.x - point.x) // abs(self.x - point.x)
+            print(step)
+            for dx in range(0, self.x - point.x, step):
+                output.append(Point(self.x + dx, self.y))
+
+        print(self.x, point.x)
+
+        if self.y != point.y:
+            step = (self.y - point.y) // abs(self.y - point.y)
+            for dy in range(0, self.y - point.y, step):
+                output.append(Point(self.x, dy + self.y))
+
+        print(self.y, point.y)
+
+        return output + [point]
+
 
 DIRS = [
     Point(0, 1),   # north
