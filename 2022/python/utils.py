@@ -143,25 +143,6 @@ class Point(NamedTuple):
     def neighbors_8(self):
         return [self + p for p in DIRS_8]
 
-    def line(self, point):
-        output = []
-        if self.x != point.x:
-            step = (self.x - point.x) // abs(self.x - point.x)
-            print(step)
-            for dx in range(0, self.x - point.x, step):
-                output.append(Point(self.x + dx, self.y))
-
-        print(self.x, point.x)
-
-        if self.y != point.y:
-            step = (self.y - point.y) // abs(self.y - point.y)
-            for dy in range(0, self.y - point.y, step):
-                output.append(Point(self.x, dy + self.y))
-
-        print(self.y, point.y)
-
-        return output + [point]
-
 
 DIRS = [
     Point(0, 1),   # north
@@ -198,3 +179,43 @@ def parse_grid(data):
                 grid[Point(x, y)] = lines[y][x]
 
     return grid
+
+
+def points_between(p1, p2):
+    # points in a straight line between two different points
+    assert p1.x == p2.x or p1.y == p2.y
+
+    output = {p1, p2}
+    if p1.x != p2.x:
+        step = (p1.x - p2.x) // abs(p1.x - p2.x)
+        for x in range(p1.x, p2.x, step):
+            output.add(Point(x, p1.y))
+
+    if p1.y != p2.y:
+        step = (p1.y - p2.y) // abs(p1.y - p2.y)
+        for y in range(p1.y, p2.y, step):
+            output.add(Point(p1.x, y))
+
+    return output
+
+
+def manhattan(p1, p2):
+    return abs(p1.x - p2.x) + abs(p1.y - p2.y)
+
+
+def euclidean_distance(p1, p2):
+    return math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2)
+
+
+def max_row_col(p1, p2):
+    return max(abs(p1.x - p2.x), abs(p1.y - p2.y))
+
+
+def surrounding_points(center, distance, func=manhattan):
+    output = set()
+    for x in range(center.x, center.x + distance + 1):
+        for y in range(center.y, center.y + distance + 1):
+            if func(center, Point(x, y)) <= distance:
+                output.add(Point(x, y))
+
+    return output
