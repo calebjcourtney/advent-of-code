@@ -5,18 +5,18 @@ from utils import (
     manhattan
 )
 
-from typing import Tuple, List
+from typing import Tuple, List, Generator
 
 
 class Sensor:
     def __init__(self, sx: int, sy: int, bx: int, by: int):
         self.center = Point(sx, sy)
-        self.distance = manhattan(self.center, Point(bx, by))
+        self.radius = manhattan(self.center, Point(bx, by))
+        self.distance = self.radius + 1
 
-    def sensor_line(self, xy_range: Tuple[int, int] = None):
-        output = set()
-        for dx in range(self.distance + 2):
-            dy = self.distance + 1 - dx
+    def sensor_line(self, xy_range: Tuple[int, int] = None) -> Generator:
+        for dx in range(self.radius + 2):
+            dy = self.radius + 1 - dx
 
             for x in [self.center.x + dx, self.center.x + dx]:
                 for y in [self.center.y + dy, self.center.y + dy]:
@@ -26,16 +26,14 @@ class Sensor:
                     if not xy_range[0] <= y <= xy_range[1]:
                         continue
 
-                    output.add(Point(x, y))
-
-        return output
+                    yield Point(x, y)
 
     def contains(self, point):
-        return manhattan(point, self.center) <= self.distance
+        return manhattan(point, self.center) <= self.radius
 
     def x_vals(self, y_val):
         dist_used = abs(self.center.y - y_val)
-        dist_left = self.distance - dist_used
+        dist_left = self.radius - dist_used
 
         x_min = self.center.x - dist_left
         x_max = self.center.x + dist_left + 1
