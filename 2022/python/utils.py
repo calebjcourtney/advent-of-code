@@ -4,6 +4,8 @@ from typing import List, Tuple, NamedTuple
 from more_itertools import windowed
 import math
 
+from collections import deque
+
 from aocd.models import Puzzle
 
 
@@ -73,11 +75,17 @@ def chunks(lst, n):
 
 
 def array_left_rotate(lst, n=1):
-    return lst[n:] + lst[:n]
+    if isinstance(lst, list):
+        return lst[n:] + lst[:n]
+
+    raise ValueError("if you're using a deque, use the .rotate() method")
 
 
 def array_right_rotate(lst, n=1):
-    return lst[-n:] + lst[:-n]
+    if isinstance(lst, list):
+        return lst[-n:] + lst[:-n]
+
+    raise ValueError("if you're using a deque, use the .rotate() method")
 
 
 def rotate_text(text: str) -> str:
