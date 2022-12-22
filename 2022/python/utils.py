@@ -1,12 +1,14 @@
 import os
 import re
 from typing import List, Tuple, NamedTuple
+from numbers import Number
 from more_itertools import windowed
 import math
 
-from collections import deque
-
 from aocd.models import Puzzle
+
+from numpy import ones, vstack
+from numpy.linalg import lstsq
 
 
 def get_data(day: str) -> str:
@@ -227,3 +229,12 @@ def surrounding_points(center, distance, func=manhattan):
                 output.add(Point(x, y))
 
     return output
+
+
+def get_line(p1: Point, p2: Point) -> Tuple[Number, Number]:
+    x_coords = p1.x, p2.x
+    y_coords = p1.y, p2.y
+
+    A = vstack([x_coords, ones(len(x_coords))]).T
+    m, c = lstsq(A, y_coords, rcond=None)[0]
+    return m, c
