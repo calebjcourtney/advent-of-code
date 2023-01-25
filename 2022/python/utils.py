@@ -154,24 +154,18 @@ class Point(NamedTuple):
         return [self + p for p in DIRS_8]
 
 
-DIRS = [
-    Point(0, 1),   # north
-    Point(1, 0),   # east
-    Point(0, -1),  # south
-    Point(-1, 0),  # west
-]
+N = Point(0, 1)
+NE = Point(1, 1)
+E = Point(1, 0)
+SE = Point(1, -1)
+S = Point(0, -1)
+SW = Point(-1, -1)
+W = Point(-1, 0)
+NW = Point(-1, 1)
 
 
-DIRS_8 = [
-    Point(0, 1),    # N
-    Point(1, 1),    # NE
-    Point(1, 0),    # E
-    Point(1, -1),   # SE
-    Point(0, -1),   # S
-    Point(-1, -1),  # SW
-    Point(-1, 0),   # W
-    Point(-1, 1),   # NW
-]
+DIRS = [N, S, E, W]
+DIRS_8 = [N, NE, E, SE, S, SW, W, NW]
 
 
 def parse_grid(data):
@@ -185,7 +179,7 @@ def parse_grid(data):
     elif isinstance(data, str) and "\n" in data:
         lines = data.split("\n")
         for y in range(len(lines)):
-            for x in range(len(lines[x])):
+            for x in range(len(lines[y])):
                 grid[Point(x, y)] = lines[y][x]
 
     return grid
@@ -238,3 +232,30 @@ def get_line(p1: Point, p2: Point) -> Tuple[Number, Number]:
     A = vstack([x_coords, ones(len(x_coords))]).T
     m, c = lstsq(A, y_coords, rcond=None)[0]
     return m, c
+
+
+def min_max_xy(points: List[Point]):
+    if len(points) == 0:
+        return None, None, None, None
+
+    return (
+        min(p.x for p in points),
+        max(p.x for p in points),
+        min(p.y for p in points),
+        max(p.y for p in points),
+    )
+
+
+def rotated(matrix: List[List]) -> List[List]:
+    """Returns the given matrix rotated 90 degrees clockwise."""
+    return [list(r) for r in zip(*matrix[::-1])]
+
+
+def firsts(matrix: List[List]) -> List[List]:
+    """Like matrix[0], but for the first column."""
+    return rotated(matrix)[0]
+
+
+def lasts(matrix):
+    """Like matrix[-1], but for the last column."""
+    return rotated(matrix)[-1]
