@@ -8,13 +8,6 @@ import std.file;
 import std.regex;
 
 
-//def part_two(data: List[Tuple[Set, Set]]) -> int:
-//    return sum(
-//        bool(s1 & s2)
-//        for (s1, s2) in data
-//    )
-
-
 struct Row
 {
     int[] r1;
