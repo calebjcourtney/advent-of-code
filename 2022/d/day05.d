@@ -77,35 +77,27 @@ string partTwo(Stack[int] stacks, Instruction[] instructions) {
 }
 
 
+Stack[int] getStackData() {
+    return [
+        1: Stack(["G", "D", "V", "Z", "J", "S", "B"]),
+        2: Stack(["Z", "S", "M", "G", "V", "P"]),
+        3: Stack(["C", "L", "B", "S", "W", "T", "Q", "F"]),
+        4: Stack(["H", "J", "G", "W", "M", "R", "V", "Q"]),
+        5: Stack(["C", "L", "S", "N", "F", "M", "D"]),
+        6: Stack(["R", "G", "C", "D"]),
+        7: Stack(["H", "G", "T", "R", "J", "D", "S", "Q"]),
+        8: Stack(["P", "F", "V"]),
+        9: Stack(["D", "R", "S", "T", "J"])
+    ];
+}
+
+
 void main(string[] args)
 {
     auto data = readText("../inputs/input05.txt");
     auto instructions = data.split("\n\n")[1].strip.split("\n").map!(a => parseInstructions(a)).array;
 
-    Stack[int] stackData = [
-        1: Stack(["G", "D", "V", "Z", "J", "S", "B"]),
-        2: Stack(["Z", "S", "M", "G", "V", "P"]),
-        3: Stack(["C", "L", "B", "S", "W", "T", "Q", "F"]),
-        4: Stack(["H", "J", "G", "W", "M", "R", "V", "Q"]),
-        5: Stack(["C", "L", "S", "N", "F", "M", "D"]),
-        6: Stack(["R", "G", "C", "D"]),
-        7: Stack(["H", "G", "T", "R", "J", "D", "S", "Q"]),
-        8: Stack(["P", "F", "V"]),
-        9: Stack(["D", "R", "S", "T", "J"])
-    ];
-    writeln(partOne(stackData, instructions));
-
-    stackData = [
-        1: Stack(["G", "D", "V", "Z", "J", "S", "B"]),
-        2: Stack(["Z", "S", "M", "G", "V", "P"]),
-        3: Stack(["C", "L", "B", "S", "W", "T", "Q", "F"]),
-        4: Stack(["H", "J", "G", "W", "M", "R", "V", "Q"]),
-        5: Stack(["C", "L", "S", "N", "F", "M", "D"]),
-        6: Stack(["R", "G", "C", "D"]),
-        7: Stack(["H", "G", "T", "R", "J", "D", "S", "Q"]),
-        8: Stack(["P", "F", "V"]),
-        9: Stack(["D", "R", "S", "T", "J"])
-    ];
-    writeln(partTwo(stackData, instructions));
+    writeln(partOne(getStackData(), instructions));
+    writeln(partTwo(getStackData(), instructions));
 
 }
