@@ -7,6 +7,8 @@ import std.array;
 import std.file;
 import std.math;
 
+import utils: Point;
+
 
 struct Instruction {
     string direction;
@@ -17,26 +19,6 @@ struct Instruction {
 Instruction parseLine(string line) {
     auto info = line.strip().split();
     return Instruction(info[0], info[1].to!int);
-}
-
-
-struct Point {
-    int x;
-    int y;
-
-    size_t toHash() const @safe pure nothrow
-    {
-        size_t hash;
-        foreach (val; [x, y])
-            hash = (hash * 999) + val;
-
-        return hash;
-    }
-
-    bool opEquals(ref const Point p) const @safe pure nothrow
-    {
-        return this.x == p.x && this.y == p.y;
-    }
 }
 
 
