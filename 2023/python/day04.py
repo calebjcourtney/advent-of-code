@@ -1,12 +1,13 @@
 from utils import get_line_data
 
 from collections import defaultdict
-import re
 
 
 def overlapping_nums(line: str):
-    winning_nums = set(re.findall(r"(\d+)", line.split("|")[0].split(": ")[1]))
-    my_nums = set(re.findall(r"(\d+)", line.split("|")[1]))
+    _, nums = line.split(": ")
+    winning_nums, my_nums = nums.split(" | ")
+    winning_nums = set(winning_nums.split())
+    my_nums = set(my_nums.split())
     return len(winning_nums & my_nums)
 
 
@@ -17,11 +18,9 @@ def combined(data):
     for card_id, line in enumerate(data, start=1):
         matches = overlapping_nums(line)
 
+        p1_result += 2 ** (matches - 1) if matches else 0
+
         p2_cards[card_id] += 1
-
-        if matches:
-            p1_result += 2 ** (matches - 1)
-
         for copy_id in range(card_id + 1, card_id + matches + 1):
             p2_cards[copy_id] += p2_cards[card_id]
 
