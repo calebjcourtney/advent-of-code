@@ -14,14 +14,7 @@ class Mapper:
         lines = lines.split("\n")[1:]
         self.maps: list[Map] = [Map(*[int(x) for x in line.split()]) for line in lines]
 
-    def part_one(self, x: int) -> int:
-        for resource_map in self.maps:
-            if resource_map.source <= x < resource_map.source + resource_map.size:
-                return x + resource_map.destination - resource_map.source
-
-        return x
-
-    def part_two(self, current_range):
+    def solve(self, current_range):
         out_of_bounds_range = []
         for resource_map in self.maps:
             src_end = resource_map.source + resource_map.size
@@ -58,9 +51,11 @@ def parse_data(data):
 def part_one(seed, mappers):
     output = []
     for x in seed:
+        current_range = [(x, x + 1)]
         for mp in mappers:
-            x = mp.part_one(x)
-        output.append(x)
+            current_range = mp.solve(current_range)
+
+        output.append(min(current_range)[0])
 
     return min(output)
 
@@ -71,7 +66,7 @@ def part_two(seed, mappers):
     for start, size in pairs:
         current_range = [(start, start + size)]
         for mp in mappers:
-            current_range = mp.part_two(current_range)
+            current_range = mp.solve(current_range)
         output.append(min(current_range)[0])
 
     return min(output)
