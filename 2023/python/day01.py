@@ -2,7 +2,7 @@ from utils import get_line_data
 from utils import timeit
 
 
-data = get_line_data(1)
+data = get_line_data("01")
 
 
 @timeit
