@@ -1,4 +1,5 @@
 from utils import get_line_data
+from utils import timeit
 
 from collections import defaultdict
 
@@ -11,6 +12,7 @@ def overlapping_nums(line: str):
     return len(winning_nums & my_nums)
 
 
+@timeit
 def combined(data):
     p1_result = 0
     p2_cards = defaultdict(int)

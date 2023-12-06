@@ -1,6 +1,7 @@
 from typing import NamedTuple
 
 from utils import get_data
+from utils import timeit
 
 
 class Map(NamedTuple):
@@ -48,6 +49,7 @@ def parse_data(data):
     return seed, others
 
 
+@timeit
 def part_one(seed, mappers):
     output = []
     for x in seed:
@@ -60,6 +62,7 @@ def part_one(seed, mappers):
     return min(output)
 
 
+@timeit
 def part_two(seed, mappers):
     output = []
     pairs = list(zip(seed[::2], seed[1::2]))

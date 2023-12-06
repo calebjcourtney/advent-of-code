@@ -1,6 +1,7 @@
 from math import prod
 
 from utils import get_line_data
+from utils import timeit
 
 
 def solve(time, record):
@@ -22,6 +23,7 @@ def solve(time, record):
     return ub - lb
 
 
+@timeit
 def part_one(data):
     times = list(map(int, data[0].split(":")[1].split()))
     records = list(map(int, data[1].split(":")[1].split()))
@@ -29,6 +31,7 @@ def part_one(data):
     return prod(solve(t, d) for t, d in zip(times, records))
 
 
+@timeit
 def part_two(data):
     time = int("".join(data[0].split(":")[1].strip().split()))
     record = int("".join(data[1].split(":")[1].strip().split()))

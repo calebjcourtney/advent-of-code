@@ -8,18 +8,23 @@ args = parser.parse_args()
 
 day = args.day if len(str(args.day)) == 2 else f"0{args.day}"
 
-python_script = f"""from utils import get_data, get_line_data, get_int_data
+python_script = f"""from utils import get_data
+from utils import get_line_data
+from utils import get_int_data
+from utils import timeit
 
 import numpy
 import itertools
 import collections
 
 
+@timeit
 def part_one(data):
     for line in data:
         pass
 
 
+@timeit
 def part_two(data):
     for line in data:
         pass

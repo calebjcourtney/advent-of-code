@@ -1,8 +1,10 @@
 import re
 
 from utils import get_line_data
+from utils import timeit
 
 
+@timeit
 def combined(data):
     red_count = re.compile(r"(\d+) red")
     blue_count = re.compile(r"(\d+) blue")

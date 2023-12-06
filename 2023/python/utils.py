@@ -4,6 +4,7 @@ from typing import List, Tuple, NamedTuple
 from numbers import Number
 from more_itertools import windowed
 import math
+import time
 
 from aocd.models import Puzzle
 
@@ -261,3 +262,17 @@ def firsts(matrix: List[List]) -> List[List]:
 def lasts(matrix):
     """Like matrix[-1], but for the last column."""
     return rotated(matrix)[-1]
+
+
+def timeit(func):
+    '''Decorator that reports the execution time.'''
+
+    def wrap(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+
+        print(f"Time taken for {func.__name__}: {end - start}")
+        return result
+
+    return wrap

@@ -1,7 +1,11 @@
 from utils import get_line_data
+from utils import timeit
+
+
 data = get_line_data(1)
 
 
+@timeit
 def part_one(lines: list[str]):
     nums = ["".join(x for x in line if x.isdigit()) for line in lines]
     return [int(f"{x[0]}{x[-1]}") for x in nums]
@@ -17,6 +21,7 @@ def indices(line: str) -> list[tuple[str, int]]:
     return idx
 
 
+@timeit
 def part_two(lines: list[str]):
     answer = 0
 

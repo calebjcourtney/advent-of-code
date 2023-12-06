@@ -4,6 +4,7 @@ from math import prod
 
 from utils import get_line_data, parse_grid
 from utils import DIRS_8, min_max_xy
+from utils import timeit
 
 
 class ResultNum(NamedTuple):
@@ -36,6 +37,7 @@ def get_part_number(line, index) -> ResultNum:
     return ResultNum(int(num), line, (low + 1, high - 1))
 
 
+@timeit
 def combined(data):
     part_one = set()
     part_two = 0
