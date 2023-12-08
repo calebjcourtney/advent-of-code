@@ -56,7 +56,7 @@ int partTwo(string[] lines) {
 }
 
 void main() {
-    string[] data = readText("../inputs/input01.txt").split("\n");
+    string[] data = getLineData("../inputs/input01.txt");
     writeln(sum(partOne(data)));
     writeln(partTwo(data));
 }
