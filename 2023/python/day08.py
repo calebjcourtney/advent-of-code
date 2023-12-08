@@ -1,8 +1,8 @@
 from utils import get_data
 from utils import timeit
-from utils import lcm
 
 import re
+import math
 
 
 def parse_data(data):
@@ -48,12 +48,7 @@ def part_two(instructions, mapping):
     for starting_point in starting_points:
         steps.append(get_steps(instructions, mapping, starting_point, part_one=False))
 
-    output = lcm(steps[0], steps[1])
-
-    for step in steps[2:]:
-        output = lcm(output, step)
-
-    return output
+    return math.lcm(*steps)
 
 
 if __name__ == '__main__':

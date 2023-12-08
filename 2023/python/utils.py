@@ -276,7 +276,3 @@ def timeit(func):
         return result
 
     return wrap
-
-
-def lcm(a, b):
-    return abs(a * b) // math.gcd(a, b)
