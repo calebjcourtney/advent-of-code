@@ -7,7 +7,6 @@ from utils import N as S
 from utils import S as N
 from utils import min_max_xy
 from utils import iterate_grid
-from utils import print_grid
 
 
 TARGETS = {
@@ -22,6 +21,7 @@ NW = W + N
 SE = E + S
 SW = W + S
 
+# figured it out by looking at the input data
 START = "F"
 
 
@@ -127,7 +127,7 @@ class PipeMap:
 
         # made it easier to debug
         self.grid = {point: (value if point in points else ".") for point, value in self.grid.items()}
-        self.grid[self.start] = "F"
+        self.grid[self.start] = START
 
         part_two = 0
 
