@@ -171,7 +171,7 @@ DIRS = [N, S, E, W]
 DIRS_8 = [N, NE, E, SE, S, SW, W, NW]
 
 
-def parse_grid(data):
+def parse_grid(data, keep_values=list[any] | str | None):
     # convert the data to a grid format
     grid = {}
     if isinstance(data, list):
@@ -184,6 +184,9 @@ def parse_grid(data):
         for y in range(len(lines)):
             for x in range(len(lines[y])):
                 grid[Point(x, y)] = lines[y][x]
+
+    if keep_values is not None:
+        grid = {k: v for k, v in grid.items() if v in keep_values}
 
     return grid
 

@@ -1,27 +1,19 @@
 from utils import get_line_data
 from utils import timeit
 from utils import parse_grid
+from utils import Point
 
 import itertools
 
 
 def get_empty_col_rows(data):
-    rows = []
-    for i, row in enumerate(data):
-        if "#" not in row:
-            rows.append(i)
-
-    columns = []
-    for c in range(len(data[0])):
-        if "#" not in [row[c] for row in data]:
-            columns.append(c)
-
+    rows = [i for i, row in enumerate(data) if "#" not in row]
+    columns = [c for c in range(len(data[0])) if "#" not in [row[c] for row in data]]
     return columns, rows
 
 
 @timeit
-def combined(data, columns, rows, factor):
-    galaxies = {point for point, value in grid.items() if value == "#"}
+def combined(galaxies: dict[Point, str], columns: list[int], rows: list[int], factor: int):
     total = 0
     for g1, g2 in itertools.combinations(galaxies, 2):
         total += abs(g1.x - g2.x) + abs(g1.y - g2.y)
@@ -36,13 +28,10 @@ def combined(data, columns, rows, factor):
     return total
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     data = get_line_data("11")
     columns, rows = get_empty_col_rows(data)
-    grid = parse_grid(data)
+    galaxies = parse_grid(data, "#")
 
-    p1_result = combined(grid, columns, rows, 2)
-    print(p1_result)
-
-    p2_result = combined(grid, columns, rows, 1000000)
-    print(p2_result)
+    print(combined(galaxies, columns, rows, 2))
+    print(combined(galaxies, columns, rows, 1000000))
