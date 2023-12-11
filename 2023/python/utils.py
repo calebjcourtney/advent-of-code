@@ -1,6 +1,6 @@
 import os
 import re
-from typing import List, Tuple, NamedTuple
+from typing import List, Tuple, NamedTuple, Any, Generator
 from numbers import Number
 from more_itertools import windowed
 import math
@@ -186,6 +186,22 @@ def parse_grid(data):
                 grid[Point(x, y)] = lines[y][x]
 
     return grid
+
+
+def iterate_grid(grid: dict[Point, Any]) -> Generator[Point, None, None]:
+    # iterate over values in the grid in ascending order of row and column
+    for point in sorted(grid.keys(), key=lambda p: (p.y, p.x)):
+        yield point
+
+
+def print_grid(grid: dict[Point, str]) -> None:
+    # print the grid
+    min_x, max_x, min_y, max_y = min_max_xy(grid.keys())
+
+    for y in range(min_y, max_y + 1):
+        for x in range(min_x, max_x + 1):
+            print(grid[Point(x, y)], end="")
+        print()
 
 
 def points_between(p1, p2):
