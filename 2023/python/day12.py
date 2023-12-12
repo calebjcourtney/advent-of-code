@@ -24,7 +24,10 @@ class Solver:
             # Check if the pattern is fully matched
             if pattern_index == len(self.pattern) and cur_len == 0:
                 return 1
-            elif pattern_index == len(self.pattern) - 1 and self.pattern[pattern_index] == cur_len:
+            elif (
+                pattern_index == len(self.pattern) - 1
+                and self.pattern[pattern_index] == cur_len
+            ):
                 return 1
             else:
                 return 0
@@ -35,7 +38,12 @@ class Solver:
             if self.springs[spring_index] == char or self.springs[spring_index] == "?":
                 if char == "." and cur_len == 0:
                     answer += self.solve(spring_index + 1, pattern_index, 0)
-                elif char == "." and cur_len > 0 and pattern_index < len(self.pattern) and self.pattern[pattern_index] == cur_len:
+                elif (
+                    char == "."
+                    and cur_len > 0
+                    and pattern_index < len(self.pattern)
+                    and self.pattern[pattern_index] == cur_len
+                ):
                     answer += self.solve(spring_index + 1, pattern_index + 1, 0)
                 elif char == "#":
                     answer += self.solve(spring_index + 1, pattern_index, cur_len + 1)
