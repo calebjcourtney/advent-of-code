@@ -3,8 +3,9 @@ from utils import timeit
 
 
 @timeit
-def combined(patterns: list[str], smudges_allowed=0) -> int:
-    output = 0
+def combined(patterns: list[str]) -> int:
+    part_one = 0
+    part_two = 0
     for pattern in patterns:
         row_len = len(pattern)
         col_len = len(pattern[0])
@@ -24,8 +25,10 @@ def combined(patterns: list[str], smudges_allowed=0) -> int:
                     if pattern[row][left] != pattern[row][right]:
                         smudges += 1
 
-            if smudges == smudges_allowed:
-                output += col + 1
+            if smudges == 0:
+                part_one += col + 1
+            elif smudges == 1:
+                part_two += col + 1
 
         # Horizontal symmetry
         for row in range(row_len - 1):
@@ -42,15 +45,19 @@ def combined(patterns: list[str], smudges_allowed=0) -> int:
                     if pattern[top][col] != pattern[bottom][col]:
                         smudges += 1
 
-            if smudges == smudges_allowed:
-                output += 100 * (row + 1)
+            if smudges == 0:
+                part_one += 100 * (row + 1)
+            elif smudges == 1:
+                part_two += 100 * (row + 1)
 
-    return output
+    return part_one, part_two
 
 
 if __name__ == "__main__":
     patterns = get_data("13").split("\n\n")
     patterns = [list(map(list, pattern.split("\n"))) for pattern in patterns]
 
-    print("part 1:", combined(patterns))
-    print("part 2:", combined(patterns, 1))
+    p1, p2 = combined(patterns)
+
+    print("part 1:", p1)
+    print("part 2:", p2)
