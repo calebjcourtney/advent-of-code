@@ -291,7 +291,7 @@ def timeit(func):
         result = func(*args, **kwargs)
         end = time.time()
 
-        print(f"Time taken for {func.__name__}: {end - start}")
+        print(f"Time taken for {func.__name__}: {round(end - start, 4)}")
         return result
 
     return wrap
