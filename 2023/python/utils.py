@@ -171,7 +171,7 @@ DIRS = [N, S, E, W]
 DIRS_8 = [N, NE, E, SE, S, SW, W, NW]
 
 
-def parse_grid(data, keep_values=list[any] | str | None):
+def parse_grid(data, keep_values: list[any] | str | None = None):
     # convert the data to a grid format
     grid = {}
     if isinstance(data, list):
@@ -201,10 +201,16 @@ def print_grid(grid: dict[Point, str]) -> None:
     # print the grid
     min_x, max_x, min_y, max_y = min_max_xy(grid.keys())
 
+    output = ""
+
     for y in range(min_y, max_y + 1):
         for x in range(min_x, max_x + 1):
             print(grid[Point(x, y)], end="")
+            output += grid[Point(x, y)]
         print()
+        output += "\n"
+
+    return output.strip()
 
 
 def points_between(p1, p2):
