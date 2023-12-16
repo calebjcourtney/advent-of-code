@@ -1,6 +1,6 @@
 import os
 import re
-from typing import List, Tuple, NamedTuple, Any, Generator
+from typing import List, Tuple, NamedTuple, Any, Generator, Callable
 from numbers import Number
 from more_itertools import windowed
 import math
@@ -293,11 +293,25 @@ def timeit(func):
     '''Decorator that reports the execution time.'''
 
     def wrap(*args, **kwargs):
-        start = time.time()
+        start = time.monotonic()
         result = func(*args, **kwargs)
-        end = time.time()
+        end = time.monotonic()
 
         print(f"Time taken for {func.__name__}: {round(end - start, 4)}")
         return result
 
     return wrap
+
+
+def memoize(f: Callable):
+    """Simple dictionary-based memoization decorator"""
+    cache = {}
+
+    def _mem_fn(*args):
+        hargs = (','.join(str(x) for x in args))
+        if hargs not in cache:
+            cache[hargs] = f(*args)
+        return cache[hargs]
+
+    _mem_fn.cache = cache
+    return _mem_fn
