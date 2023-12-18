@@ -6,11 +6,9 @@ from utils import S as U
 from utils import E as R
 from utils import W as L
 
-from collections import deque
+import numpy as np
 
 from typing import NamedTuple
-
-from tqdm import tqdm
 
 
 MAPPING = {'R': R, 'L': L, 'U': U, 'D': D}
@@ -35,20 +33,21 @@ def parse_data(line: str, part_one: bool = True) -> Instruction:
 
 @timeit
 def combined(data, part_one=True):
-    dig_points = deque([])
+    x = []
+    y = []
+    circumference = 0
     current = Point(0, 0)
-    for line in tqdm(data):
+    for line in data:
         instruction = parse_data(line, part_one)
-        for _ in range(instruction.distance):
-            current += instruction.direction
-            dig_points.append(current)
+        current += instruction.direction * instruction.distance
+        x.append(current.x)
+        y.append(current.y)
+        circumference += instruction.distance
 
-    x = [point.x for point in dig_points]
-    y = [point.y for point in dig_points]
+    left = sum(np.multiply(x[:-1], y[1:]))
+    right = sum(np.multiply(y[:-1], x[1:]))
 
-    left = sum(a * b for a, b in zip(x, y[1:]))
-    right = sum(a * b for a, b in zip(y, x[1:]))
-    return abs(left - right) // 2 + len(dig_points) // 2 + 1
+    return abs(left - right) // 2 + circumference // 2 + 1
 
 
 if __name__ == '__main__':
