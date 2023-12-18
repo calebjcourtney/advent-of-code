@@ -197,16 +197,19 @@ def iterate_grid(grid: dict[Point, Any]) -> Generator[Point, None, None]:
         yield point
 
 
-def print_grid(grid: dict[Point, str]) -> None:
-    # print the grid
+def print_grid(grid: dict[Point, str], fill: str = None) -> None:
     min_x, max_x, min_y, max_y = min_max_xy(grid.keys())
 
     output = ""
 
     for y in range(min_y, max_y + 1):
         for x in range(min_x, max_x + 1):
-            print(grid[Point(x, y)], end="")
-            output += grid[Point(x, y)]
+            if Point(x, y) not in grid and fill is not None:
+                print(fill, end="")
+                output += fill
+            else:
+                print(grid[Point(x, y)], end="")
+                output += grid[Point(x, y)]
         print()
         output += "\n"
 
