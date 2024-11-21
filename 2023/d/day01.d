@@ -7,7 +7,6 @@ import std.file;
 
 
 string[] getLineData(string fileName) {
-    import std.file;
     return fileName.readText().strip().splitter("\n").array();
 }
 
