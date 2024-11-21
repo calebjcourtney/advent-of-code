@@ -5,56 +5,78 @@ from utils import N as D
 from utils import S as U
 from utils import E as R
 from utils import W as L
+from utils import manhattan
 
-import numpy as np
-
-from typing import NamedTuple
-
-
-MAPPING = {'R': R, 'L': L, 'U': U, 'D': D}
+from utils import Point, N, S, E, W
 
 
-class Instruction(NamedTuple):
-    direction: Point
-    distance: int
+DIR_MAPPING = {
+    # part one
+    'U': N,
+    'D': S,
+    'L': W,
+    'R': E,
+    # part two
+    '0': E,
+    '1': S,
+    '2': W,
+    '3': N,
+}
 
 
-def parse_data(line: str, part_one: bool = True) -> Instruction:
-    direction, dist, rgb_hex = line.split()
-    if part_one:
-        direction = MAPPING[direction]
-        dist = int(dist)
-    else:
-        direction = MAPPING["RDLU"[int(rgb_hex[-2])]]
-        dist = int(rgb_hex[2:-2], 16)
+def area(points):
+    # shoelace formula
+    area = 0
 
-    return Instruction(direction, dist)
+    for a, b in zip(points, points[1:] + [points[0]]):
+        area += (b.x + a.x) * (b.y - a.y)
+
+    area = int(abs(area / 2.0))
+
+    # perimeter
+    perimeter = sum(manhattan(a, b) for a, b in zip(points, points[1:] + [points[0]]))
+
+    # outer strip
+    return area + (perimeter // 2) + 1
 
 
-@timeit
-def combined(data, part_one=True):
-    x = []
-    y = []
-    circumference = 0
-    current = Point(0, 0)
+def part_one(data):
+    pos = Point(0, 0)
+    points = [pos]
+
     for line in data:
-        instruction = parse_data(line, part_one)
-        current += instruction.direction * instruction.distance
-        x.append(current.x)
-        y.append(current.y)
-        circumference += instruction.distance
+        direction, distance, hex_code = line.split()
+        direction = DIR_MAPPING[direction]
+        dist = int(distance)
 
-    left = sum(np.multiply(x[:-1], y[1:]))
-    right = sum(np.multiply(y[:-1], x[1:]))
+        pos += direction * dist
 
-    return abs(left - right) // 2 + circumference // 2 + 1
+        points.append(pos)
+
+    return area(points)
+
+
+
+def part_two(data):
+    pos = Point(0, 0)
+    points = [pos]
+
+    for line in data:
+        direction, distance, hex_code = line.split()
+
+        direction = DIR_MAPPING[hex_code[-2]]
+        dist = int(hex_code[2:-2], 16)
+
+        pos += direction * dist
+
+        points.append(pos)
+
+    return area(points)
+
 
 
 if __name__ == '__main__':
     data = get_line_data("18")
 
-    p1_result = combined(data)
-    print(p1_result)
-
-    p2_result = combined(data, False)
-    print(p2_result)
+    print(part_one(data))
+    print(part_two(data))
