@@ -8,6 +8,7 @@ import time
 
 from aocd.models import Puzzle
 
+import numpy as np
 from numpy import ones, vstack
 from numpy.linalg import lstsq
 
@@ -318,3 +319,31 @@ def memoize(f: Callable):
 
     _mem_fn.cache = cache
     return _mem_fn
+
+
+def poly_area(points: list[Point]):
+    x = [p.x for p in points]
+    y = [p.y for p in points]
+
+    left = sum(np.multiply(x[:-1], y[1:]))
+    right = sum(np.multiply(y[:-1], x[1:]))
+
+    return abs(left - right) // 2
+
+
+def range_intersect(r1, r2):
+    if r1.step != 1 or r2.step != 1:
+        raise ValueError("range_intersect only works with step=1")
+
+    return range(max(r1.start, r2.start), min(r1.stop, r2.stop)) or None
+
+
+def solve_quadratic(a, b, c):
+    # solve the quadratic equation
+    d = b ** 2 - 4 * a * c
+    if d < 0:
+        return None
+    elif d == 0:
+        return -b / (2 * a)
+    else:
+        return (-b + math.sqrt(d)) / (2 * a), (-b - math.sqrt(d)) / (2 * a)
