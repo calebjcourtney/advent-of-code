@@ -5,6 +5,7 @@ from numbers import Number
 from more_itertools import windowed
 import math
 import time
+from pathlib import Path
 
 from aocd.models import Puzzle
 
@@ -12,7 +13,8 @@ import numpy as np
 from numpy import ones, vstack
 from numpy.linalg import lstsq
 
-YEAR = 2024
+
+YEAR = int(Path.cwd().parent.name)
 
 
 def get_data(day: str) -> str:
