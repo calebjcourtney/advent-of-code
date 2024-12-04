@@ -14,12 +14,10 @@ def part_one(grid: dict[Point, str]):
             continue
 
         for direction in DIRS_8:
-            if (
-                grid.get(p + direction) == "M" and
-                grid.get(p + direction * 2) == "A" and
-                grid.get(p + direction * 3) == "S"
-            ):
-                output += 1
+            output += all(
+                grid.get(p + direction * i) == "XMAS"[i]
+                for i in range(1, 4)
+            )
 
     return output
 
@@ -27,7 +25,6 @@ def part_one(grid: dict[Point, str]):
 @timeit
 def part_two(grid):
     output = 0
-
     for p, value in grid.items():
         if value != "A":
             continue
