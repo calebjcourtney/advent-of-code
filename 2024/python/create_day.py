@@ -11,6 +11,7 @@ day = args.day if len(str(args.day)) == 2 else f"0{args.day}"
 python_script = f"""from utils import get_data
 from utils import get_line_data
 from utils import get_int_data
+from utils import parse_grid
 from utils import timeit
 
 import numpy
@@ -32,6 +33,7 @@ def part_two(data):
 
 if __name__ == '__main__':
     data = get_data("{day}")
+    grid = parse_grid(data)
     data = get_line_data("{day}")
     data = get_int_data("{day}")
 
