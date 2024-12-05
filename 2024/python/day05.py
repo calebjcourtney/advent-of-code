@@ -10,7 +10,7 @@ def parse_data(data: str) -> list[list[int]]:
     ]
 
 
-def broken_rules(record: list[int], rules: list[list[int]]) -> tuple[bool, list[list[int]] | None]:
+def broken_rules(record: list[int], rules: list[list[int]]) -> list:
     broken_rules = []
     for rule in rules:
         if (
@@ -22,7 +22,7 @@ def broken_rules(record: list[int], rules: list[list[int]]) -> tuple[bool, list[
 
 
 @timeit
-def part_one(pages, rules):
+def part_one(pages: list[list[int]], rules: list[list[int]]) -> int:
     return sum(
         line[len(line) // 2]
         for line in pages
@@ -30,7 +30,7 @@ def part_one(pages, rules):
 
 
 @timeit
-def part_two(pages, rules):
+def part_two(pages: list[list[int]], rules: list[list[int]]) -> int:
     output = 0
     for line in pages:
         broken = broken_rules(line, rules)
@@ -52,7 +52,7 @@ def part_two(pages, rules):
 
 
 @timeit
-def main(pages, rules):
+def main(pages: list[list[int]], rules: list[list[int]]) -> None:
     valid_pages = []
     invalid_pages = []
     for record in pages:
