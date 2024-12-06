@@ -21,7 +21,8 @@ def main(pages: list[list[int]], rules: list[list[int]]) -> None:
     for record in pages:
         sorted_record = sorted(
             record,
-            key=lambda num: -len(orders[num] & set(record)),
+            key=lambda num: len(orders[num] & set(record)),
+            reverse=True,
         )
         if record == sorted_record:
             part_1 += record[len(record) // 2]
