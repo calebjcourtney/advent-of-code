@@ -1,74 +1,41 @@
+from collections import defaultdict
+
 from utils import get_data
 from utils import timeit
 from utils import get_nums
 
 
 def parse_data(data: str) -> list[list[int]]:
-    return [
-        list(map(int, get_nums(record)))
-        for record in data.split("\n")
-    ]
-
-
-def broken_rules(record: list[int], rules: list[list[int]]) -> list:
-    broken_rules = []
-    for rule in rules:
-        if (
-            set(rule) & set(record) == set(rule) and record.index(rule[0]) > record.index(rule[1])
-        ):
-            broken_rules.append(rule)
-
-    return broken_rules
-
-
-@timeit
-def part_one(pages: list[list[int]], rules: list[list[int]]) -> int:
-    return sum(
-        line[len(line) // 2]
-        for line in pages
-    )
-
-
-@timeit
-def part_two(pages: list[list[int]], rules: list[list[int]]) -> int:
-    output = 0
-    for line in pages:
-        broken = broken_rules(line, rules)
-        while broken:
-            for broken_rule in broken:
-                (
-                    line[line.index(broken_rule[0])],
-                    line[line.index(broken_rule[1])],
-                ) = (
-                    line[line.index(broken_rule[1])],
-                    line[line.index(broken_rule[0])],
-                )
-
-            broken = broken_rules(line, rules)
-
-        output += line[len(line) // 2]
-
-    return output
+    return list(map(get_nums, data.split("\n")))
 
 
 @timeit
 def main(pages: list[list[int]], rules: list[list[int]]) -> None:
-    valid_pages = []
-    invalid_pages = []
-    for record in pages:
-        if broken_rules(record, rules):
-            invalid_pages.append(record)
-        else:
-            valid_pages.append(record)
+    orders = defaultdict(set)
+    for rule in rules:
+        orders[rule[0]].add(rule[1])
 
-    print(part_one(valid_pages, rules))
-    print(part_two(invalid_pages, rules))
+    part_1 = 0
+    part_2 = 0
+
+    for record in pages:
+        sorted_record = sorted(
+            record,
+            key=lambda num: -len(orders[num] & set(record)),
+        )
+        if record == sorted_record:
+            part_1 += record[len(record) // 2]
+        else:
+            part_2 += sorted_record[len(sorted_record) // 2]
+
+    print(part_1)
+    print(part_2)
 
 
 if __name__ == '__main__':
     data = get_data(5)
     rules, pages = data.split("\n\n")
-    rules = parse_data(rules)
     pages = parse_data(pages)
+    rules = parse_data(rules)
 
     main(pages, rules)
