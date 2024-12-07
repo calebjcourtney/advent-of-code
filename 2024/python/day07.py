@@ -74,8 +74,5 @@ def part_two(data):
 if __name__ == '__main__':
     data = list(map(parse_data, get_line_data("07")))
 
-    p1_result = part_one(data)
-    print(p1_result)
-
-    p2_result = part_two(data)
-    print(p2_result)
+    print(part_one(data))
+    print(part_two(data))
