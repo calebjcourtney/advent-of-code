@@ -1,7 +1,5 @@
-from typing import NamedTuple
 from collections import defaultdict
 from collections import deque
-from tqdm import tqdm
 
 from utils import get_data
 from utils import timeit
