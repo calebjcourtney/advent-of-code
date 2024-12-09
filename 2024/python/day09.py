@@ -66,23 +66,20 @@ def part_one(data):
 
 @timeit
 def part_two(data):
-    original_index = {data[0].id: 0}
-    for first, second in zip(data, data[1:]):
-        original_index[second.id] = original_index[first.id] + first.files + first.free
-
     empty_spots = defaultdict(list)
-    for record in data:
-        empty_spots[record.free].append(record.id)
-
-    del empty_spots[0]
-
     free_indices = defaultdict(list)
+    original_index = {}
     index = 0
     for record in data:
+        original_index[record.id] = index
         index += record.files
         for _ in range(record.free):
             free_indices[record.id].append(index)
             index += 1
+
+        empty_spots[record.free].append(record.id)
+
+    del empty_spots[0]
 
     moved_index = {}
 
