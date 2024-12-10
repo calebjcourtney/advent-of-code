@@ -8,8 +8,9 @@ from utils import DIRS
 from utils import Point
 
 
-def get_peaks(grid: dict[Point, int], current_pos: Point) -> int:
+def get_score(grid: dict[Point, int], current_pos: Point) -> int:
     peaks = set()
+    paths = defaultdict(int)
     positions = deque([current_pos])
     while positions:
         position = positions.popleft()
@@ -17,27 +18,12 @@ def get_peaks(grid: dict[Point, int], current_pos: Point) -> int:
             new_position = position + direction
             if new_position in grid:
                 if grid[new_position] == grid[position] + 1 and grid[new_position] == 9:
+                    paths[new_position] += 1
                     peaks.add(new_position)
                 elif grid[new_position] == grid[position] + 1:
                     positions.append(new_position)
 
-    return len(peaks)
-
-
-def get_rating(grid: dict[Point, int], current_pos: Point) -> int:
-    peaks = defaultdict(int)
-    positions = deque([current_pos])
-    while positions:
-        position = positions.popleft()
-        for direction in DIRS:
-            new_position = position + direction
-            if new_position in grid:
-                if grid[new_position] == grid[position] + 1 and grid[new_position] == 9:
-                    peaks[new_position] += 1
-                elif grid[new_position] == grid[position] + 1:
-                    positions.append(new_position)
-
-    return sum(peaks.values())
+    return sum(paths.values()), len(peaks)
 
 
 @timeit
@@ -47,8 +33,9 @@ def main(grid: dict[Point, int]) -> None:
     p2 = 0
 
     for th in trail_heads:
-        p1 += get_peaks(grid, th)
-        p2 += get_rating(grid, th)
+        paths, peaks = get_score(grid, th)
+        p1 += peaks
+        p2 += paths
 
     print(p1)
     print(p2)
