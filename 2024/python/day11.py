@@ -2,15 +2,11 @@ from utils import get_data
 from utils import get_nums
 from utils import timeit
 
-from collections import deque
 from collections import Counter
-from tqdm import tqdm
-
-from functools import lru_cache
 
 
 def get_new(num: int):
-    output = deque([])
+    output = []
     if num == 0:
         output.append(1)
     elif len(str(num)) % 2 == 0:
