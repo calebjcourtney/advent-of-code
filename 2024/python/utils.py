@@ -153,9 +153,11 @@ class Point(NamedTuple):
     def __repr__(self):
         return "Point({}, {})".format(self.x, self.y)
 
+    @property
     def neighbors(self):
         return [self + p for p in DIRS]
 
+    @property
     def neighbors_8(self):
         return [self + p for p in DIRS_8]
 
