@@ -50,7 +50,9 @@ def main(grid):
             complete_paths.append(path)
             continue
 
-        for new_dir in [N, E, S, W]:
+        dirs = [path.direction] + [d for d in [N, S, E, W] if d != path.direction]
+
+        for new_dir in dirs:
             new_pos = path.current + new_dir
 
             if grid[new_pos] == "#" or new_pos in path.points:
