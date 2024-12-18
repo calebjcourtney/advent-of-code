@@ -56,15 +56,17 @@ def binary_search(arr: list[Point], low: int, high: int) -> Point:
     if high == low:
         return arr[low - 1]
 
-    if high > low:
+    while high > low:
         mid = (high + low) // 2
 
         try:
             solve(arr[:mid])
         except KeyError:
-            return binary_search(arr, low, mid - 1)
+            high = mid - 1
         else:
-            return binary_search(arr, mid + 1, high)
+            low = mid + 1
+
+    return arr[low - 1]
 
 
 @timeit
