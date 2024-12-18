@@ -109,8 +109,6 @@ def find(target, ans):
                 b ^= operand
             elif ins == 2:
                 b = get_combo_value(operand, a, b, c) % 8
-            elif ins == 3:
-                raise AssertionError("program has JNZ inside expected loop body")
             elif ins == 4:
                 b ^= c
             elif ins == 5:
