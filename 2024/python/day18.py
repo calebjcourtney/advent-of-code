@@ -4,11 +4,9 @@ from utils import parse_grid
 from utils import timeit
 from utils import get_nums
 from utils import Point
-from utils import N, S, E, W
+from utils import DIRS
 
-import numpy
-import itertools
-import collections
+from collections import deque
 
 
 def build_grid():
@@ -29,13 +27,13 @@ def solve(data):
 
     steps: dict[Point, int] = {Point(0, 0): 0}
 
-    queue = collections.deque([Point(0, 0)])
+    queue = deque([Point(0, 0)])
     while queue:
         current = queue.popleft()
         if current == end_point:
             return steps[current]
 
-        for direction in [N, S, E, W]:
+        for direction in DIRS:
             new_point = current + direction
             if new_point not in grid or grid[new_point] == "#":
                 continue
@@ -77,11 +75,7 @@ def part_two(data):
 
 if __name__ == '__main__':
     data = get_line_data("18")
-
     data = [Point(*get_nums(line)) for line in data]
 
-    p1_result = part_one(data)
-    print(p1_result)
-
-    p2_result = part_two(data)
-    print(p2_result)
+    print(part_one(data))
+    print(part_two(data))
