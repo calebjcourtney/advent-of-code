@@ -34,15 +34,20 @@ def parse_data(data):
 
 @timeit
 def main(towels, patterns):
-    designs = []
+    p1 = 0
+    p2 = 0
     for p in patterns:
-        sub = [t for t in towels if t in p]
-        sub.sort(key=lambda x: len(x), reverse=True)
-        sub = tuple(sub)
-        designs.append(solve(sub, p))
+        sub = sorted(
+            [t for t in towels if t in p],
+            key=len,
+            reverse=True
+        )
+        v = solve(tuple(sub), p)
+        p1 += v == 1
+        p2 += v
 
-    print(sum(1 for d in designs if d))
-    print(sum(designs))
+    print(p1)
+    print(p2)
 
 
 if __name__ == '__main__':
