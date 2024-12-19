@@ -19,8 +19,8 @@ def solve(towels: list[str], pattern: str) -> int:
 @timeit
 def main(towels: list[str], patterns: list[str]) -> None:
     designs = [solve(tuple(t for t in towels if t in p), p) for p in patterns]
-    print("Part 1:", sum(1 for d in designs if d))
-    print("Part 2:", sum(designs))
+    print(sum(1 for d in designs if d))
+    print(sum(designs))
 
 
 if __name__ == '__main__':
