@@ -37,17 +37,19 @@ def main(towels, patterns):
     p1 = 0
     p2 = 0
     for p in patterns:
-        sub = sorted(
-            [t for t in towels if t in p],
-            key=len,
-            reverse=True
+        sub = tuple(
+            sorted(
+                [t for t in towels if t in p],
+                key=len,
+                reverse=True
+            )
         )
-        v = solve(tuple(sub), p)
-        p1 += v == 1
+        v = solve(sub, p)
+        p1 += v > 0
         p2 += v
 
-    print(p1)
-    print(p2)
+    print("Part 1:", p1)
+    print("Part 2:", p2)
 
 
 if __name__ == '__main__':
