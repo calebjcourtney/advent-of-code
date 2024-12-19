@@ -5,7 +5,7 @@ from utils import timeit
 
 
 @lru_cache
-def solve(towels, pattern):
+def solve(towels: list[str], pattern: str) -> int:
     count = 0
     for towel in towels:
         if towel == pattern:
@@ -17,7 +17,7 @@ def solve(towels, pattern):
 
 
 @timeit
-def main(towels, patterns):
+def main(towels: list[str], patterns: list[str]) -> None:
     designs = [solve(tuple(t for t in towels if t in p), p) for p in patterns]
     print("Part 1:", sum(1 for d in designs if d))
     print("Part 2:", sum(designs))
