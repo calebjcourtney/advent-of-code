@@ -1,48 +1,31 @@
-from utils import get_data
 from utils import get_line_data
-from utils import parse_grid
 from utils import timeit
 from utils import get_nums
 from utils import Point
 from utils import DIRS
+from utils import get_distances
 
 from collections import deque
 
 
-def build_grid():
+def build_grid(data):
     grid = {}
     for x in range(71):
         for y in range(71):
+            if Point(x, y) in data:
+                continue
+
             grid[Point(x, y)] = "."
 
     return grid
 
 
 def solve(data):
-    grid = build_grid()
-    for point in data:
-        grid[point] = "#"
-
+    grid = build_grid(data)
     end_point = Point(70, 70)
+    distances = get_distances(grid, Point(0, 0))
 
-    steps: dict[Point, int] = {Point(0, 0): 0}
-
-    queue = deque([Point(0, 0)])
-    while queue:
-        current = queue.popleft()
-        if current == end_point:
-            return steps[current]
-
-        for direction in DIRS:
-            new_point = current + direction
-            if new_point not in grid or grid[new_point] == "#":
-                continue
-
-            if new_point not in steps or steps[new_point] > steps[current] + 1:
-                steps[new_point] = steps[current] + 1
-                queue.append(new_point)
-
-    return steps[end_point]
+    return distances[Point(70, 70)]
 
 
 @timeit
