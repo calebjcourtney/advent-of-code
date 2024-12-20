@@ -1,11 +1,7 @@
-from utils import get_data
-from utils import parse_grid
-from utils import timeit
-from utils import DIRS
-from utils import manhattan
-
 from collections import deque
 from itertools import combinations
+
+from utils import DIRS, get_data, manhattan, parse_grid, timeit
 
 
 def get_distances(grid, start):
@@ -22,9 +18,10 @@ def get_distances(grid, start):
 
     return distances
 
+
 @timeit
 def main(grid):
-    start = [p for p in grid if grid[p] == 'S'][0]
+    start = [p for p in grid if grid[p] == "S"][0]
     distances = get_distances(grid, start)
 
     p1 = 0
@@ -32,16 +29,16 @@ def main(grid):
 
     for (p, p_dist), (q, q_dist) in combinations(distances.items(), 2):
         dist = manhattan(p, q)
-        p1 += (dist == 2 and q_dist - p_dist - dist >= 100)
-        p2 += (dist < 21 and q_dist - p_dist - dist >= 100)
+        p1 += dist == 2 and q_dist - p_dist - dist >= 100
+        p2 += dist < 21 and q_dist - p_dist - dist >= 100
 
     print(p1)
     print(p2)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     grid = parse_grid(
         get_data("20"),
-        keep_values='.SE',
+        keep_values=".SE",
     )
     main(grid)
