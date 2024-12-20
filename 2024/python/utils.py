@@ -1,18 +1,17 @@
+import math
 import os
 import re
-from typing import List, Tuple, NamedTuple, Any, Generator, Callable
-from numbers import Number
-from more_itertools import windowed
-import math
 import time
+from collections import deque
+from numbers import Number
 from pathlib import Path
-
-from aocd.models import Puzzle
+from typing import Any, Callable, Generator, List, NamedTuple, Tuple
 
 import numpy as np
+from aocd.models import Puzzle
+from more_itertools import windowed
 from numpy import ones, vstack
 from numpy.linalg import lstsq
-
 
 YEAR = int(Path.cwd().parent.name)
 
@@ -79,7 +78,7 @@ def nwise(iterable, n=2):
 # https://stackoverflow.com/questions/312443/how-do-you-split-a-list-into-evenly-sized-chunks
 def chunks(lst, n):
     for i in range(0, len(lst), n):
-        yield lst[i:i + n]
+        yield lst[i : i + n]
 
 
 def array_left_rotate(lst, n=1):
@@ -253,8 +252,8 @@ def max_row_col(p1, p2):
 
 def surrounding_points(center, distance, func=manhattan):
     output = set()
-    for x in range(center.x, center.x + distance + 1):
-        for y in range(center.y, center.y + distance + 1):
+    for x in range(center.x - distance, center.x + distance + 1):
+        for y in range(center.y - distance, center.y + distance + 1):
             if func(center, Point(x, y)) <= distance:
                 output.add(Point(x, y))
 
@@ -298,7 +297,7 @@ def lasts(matrix):
 
 
 def timeit(func):
-    '''Decorator that reports the execution time.'''
+    """Decorator that reports the execution time."""
 
     def wrap(*args, **kwargs):
         start = time.monotonic()
@@ -316,7 +315,7 @@ def memoize(f: Callable):
     cache = {}
 
     def _mem_fn(*args):
-        hargs = (','.join(str(x) for x in args))
+        hargs = ",".join(str(x) for x in args)
         if hargs not in cache:
             cache[hargs] = f(*args)
         return cache[hargs]
@@ -344,10 +343,25 @@ def range_intersect(r1, r2):
 
 def solve_quadratic(a, b, c):
     # solve the quadratic equation
-    d = b ** 2 - 4 * a * c
+    d = b**2 - 4 * a * c
     if d < 0:
         return None
     elif d == 0:
         return -b / (2 * a)
     else:
         return (-b + math.sqrt(d)) / (2 * a), (-b - math.sqrt(d)) / (2 * a)
+
+
+def get_distances(grid: dict[Point, Any], start: Point) -> dict[Point, int]:
+    distances = {start: 0}
+    queue = deque([start])
+
+    while queue:
+        pos = queue.popleft()
+        for direction in DIRS:
+            new = pos + direction
+            if new in grid and new not in distances:
+                distances[new] = distances[pos] + 1
+                queue.append(new)
+
+    return distances

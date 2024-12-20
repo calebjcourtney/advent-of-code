@@ -1,26 +1,14 @@
-from collections import deque
 from itertools import combinations
 
-from utils import DIRS, get_data, manhattan, parse_grid, timeit
-
-
-def get_distances(grid, start):
-    distances = {start: 0}
-    queue = deque([start])
-
-    while queue:
-        pos = queue.popleft()
-        for direction in DIRS:
-            new = pos + direction
-            if new in grid and new not in distances:
-                distances[new] = distances[pos] + 1
-                queue.append(new)
-
-    return distances
+from utils import get_data, get_distances, manhattan, parse_grid, timeit
 
 
 @timeit
-def main(grid):
+def main(data):
+    grid = parse_grid(
+        data,
+        keep_values=".SE",
+    )
     start = [p for p in grid if grid[p] == "S"][0]
     distances = get_distances(grid, start)
 
@@ -37,8 +25,5 @@ def main(grid):
 
 
 if __name__ == "__main__":
-    grid = parse_grid(
-        get_data("20"),
-        keep_values=".SE",
-    )
-    main(grid)
+    data = get_data("20")
+    main(data)
