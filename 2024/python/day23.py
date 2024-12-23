@@ -19,7 +19,7 @@ def main(data):
     print(p1)
 
     biggest_clique = None
-    for clique in nx.enumerate_all_cliques(g):
+    for clique in cliques:
         if biggest_clique is None or len(clique) > len(biggest_clique):
             biggest_clique = clique
 
