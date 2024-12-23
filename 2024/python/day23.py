@@ -1,7 +1,6 @@
-from utils import get_line_data
-from utils import timeit
-
 import networkx as nx
+
+from utils import get_line_data, timeit
 
 
 @timeit
@@ -27,7 +26,7 @@ def main(data):
     print(",".join(sorted(biggest_clique)))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     data = get_line_data("23")
 
     main(data)
