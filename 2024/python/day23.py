@@ -6,11 +6,10 @@ from utils import get_line_data, timeit
 @timeit
 def main(data):
     data = [line.split("-") for line in data]
-    g = nx.Graph()
-    g.add_edges_from(data)
+    graph = nx.Graph()
+    graph.add_edges_from(data)
 
-    cliques = [clique for clique in nx.enumerate_all_cliques(g)]
-    triangles = [clique for clique in cliques if len(clique) == 3]
+    triangles = [clique for clique in nx.enumerate_all_cliques(graph) if len(clique) == 3]
 
     p1 = 0
     for triangle in triangles:
@@ -18,12 +17,9 @@ def main(data):
 
     print(p1)
 
-    biggest_clique = None
-    for clique in cliques:
-        if biggest_clique is None or len(clique) > len(biggest_clique):
-            biggest_clique = clique
-
-    print(",".join(sorted(biggest_clique)))
+    cliques = list(nx.find_cliques(graph))
+    largest_clique = max(cliques, key=len)
+    print(",".join(sorted(largest_clique)))
 
 
 if __name__ == "__main__":
