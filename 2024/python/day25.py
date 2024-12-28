@@ -1,4 +1,4 @@
-from utils import get_data, parse_grid
+from utils import get_data, parse_grid, timeit
 
 
 def parse_data(data):
@@ -18,8 +18,13 @@ def parse_data(data):
     return keys, locks
 
 
-if __name__ == "__main__":
-    data = get_data("25")
+@timeit
+def main(data):
     keys, locks = parse_data(data)
 
     print(sum(1 for key in keys for lock in locks if len(key & lock) == 0))
+
+
+if __name__ == "__main__":
+    data = get_data("25")
+    main(data)
