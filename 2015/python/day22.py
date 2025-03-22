@@ -101,14 +101,12 @@ def boss_fight(player, boss, spell_order, hard_mode=False):
         elif spell.effect == 'recharge' and player.recharging:
             return sys.maxsize
 
-        # print('> iKevinY casted {}!'.format(spell.name))
         spent_mana += spell.cost
         player.mp -= spell.cost
         boss.hp -= spell.dmg
 
 
         if spell.heal:
-            # print('iKevinY healed for {} hit points.'.format(spell.heal))
             player.hp += spell.heal
 
         if spell.effect == 'shielded':
@@ -149,18 +147,6 @@ def boss_fight(player, boss, spell_order, hard_mode=False):
     return spent_mana
 
 
-# # HP, Damage
-# boss_data = []
-
-# for line in fileinput.input():
-#     boss_data.append(int(line.split(': ')[1]))
-
-# boss = Character('BOSS', 13, 0, 8, 0)
-# player = Character('iKevinY', 10, 250, 0, 0)  # 50HP, 500MP
-# boss_fight(player, boss, [SPELLS[3], SPELLS[0]])
-
-# sys.exit()
-
 def simulate(hard_mode):
     most_efficient = sys.maxsize
 
@@ -171,10 +157,10 @@ def simulate(hard_mode):
                 continue
 
             boss = Character('BOSS', 71, 0, 10, 0)  # 55hp, 8dmg INPUT
-            player = Character('iKevinY', 50, 500, 0, 0)  # 50HP, 500MP
+            player = Character('Caleb', 50, 500, 0, 0)  # 50HP, 500MP
 
             # boss = Character('BOSS', 13, 0, 8, 0)
-            # player = Character('iKevinY', 10, 250, 0, 0)  # 50HP, 500MP
+            # player = Character('Caleb', 10, 250, 0, 0)  # 50HP, 500MP
             a = boss_fight(player, boss, so, hard_mode)
 
             if a < most_efficient:
@@ -185,4 +171,4 @@ def simulate(hard_mode):
             return most_efficient
 
 print('Most efficient MP on easy mode: %i' % simulate(hard_mode=False))
-print('Most efficient MP on hard mode: %i' % simulate(hard_mode=True))
+# print('Most efficient MP on hard mode: %i' % simulate(hard_mode=True))
