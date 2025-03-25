@@ -1,174 +1,147 @@
-from utils import get_data
-
-import fileinput
+import re
 import itertools
-import sys
-from collections import namedtuple
+import collections
 
 
-class Character:
-    def __init__(self, name, hp, mp, dmg, armour):
-        # Stats
-        self.name = name
-        self.hp = hp
-        self.mp = mp
-        self.dmg = dmg
-        self.armour = armour
-
-        # Status Effects
-        self.shielded = 0
-        self.poisoned = 0
-        self.recharging = 0
-
-    def print_player(self):
-        print('{} has {} hit points, {} mana, {} armour'.format(self.name, self.hp, self.mp, self.armour))
-
-    def print_boss(self):
-        print('{} has {} hit points'.format(self.name, self.hp))
-
-    def process_status(self):
-        if self.shielded:
-            self.shielded -= 1
-            self.armour = 7
-            # print("Shield's timer is now {}.".format(self.shielded))
-            if self.shielded == 0:
-                self.armour = 0
-                # print('Shield wears off.')
-
-        if self.poisoned:
-            self.poisoned -= 1
-            self.hp -= 3
-            # print('Poison deals 3 damage; its timer is now {}.'.format(self.poisoned))
-            if self.poisoned == 0:
-                pass
-                # print('Poison effects expired.')
-
-        if self.recharging:
-            self.recharging -= 1
-            self.mp += 101
-            # print('Recharge provides 101 mana; its timer is now {}.'.format(self.recharging))
-            if self.recharging == 0:
-                pass
-                # print('Recharge wears off.')
+SPELL_COSTS = {
+    'magic_missle': 53,
+    'drain': 73,
+    'shield': 113,
+    'poison': 173,
+    'recharge': 229,
+}
 
 
-Spell = namedtuple('Spell', ['name', 'cost', 'dmg', 'heal', 'effect', 'duration'])
-
-# Magic Missile costs 53 mana. It instantly does 4 damage.
-# Drain costs 73 mana. It instantly does 2 damage and heals you for 2 hit points.
-# Shield costs 113 mana. It starts an effect that lasts for 6 turns. While it is active, your armor is increased by 7.
-# Poison costs 173 mana. It starts an effect that lasts for 6 turns. At the start of each turn while it is active, it deals the boss 3 damage.
-# Recharge costs 229 mana. It starts an effect that lasts for 5 turns. At the start of each turn while it is active, it gives you 101 new mana.
-SPELLS = [
-    Spell('Missl',  53, 4, 0,    None, None),
-    Spell('Drain',  73, 2, 2,    None, None),
-    Spell('Shild', 113, 0, 0, 'shielded', 6),
-    Spell('Poisn', 173, 0, 0, 'poisoned', 6),
-    Spell('Rchrg', 229, 0, 0, 'recharge', 5),
-]
+def apply_effects(game):
+    if game['shield_timer']:
+        game['shield_timer'] = game['shield_timer'] - 1
+        if game['shield_timer'] == 0:
+            game['player_armor'] = 0
+    if game['poison_timer']:
+        game['boss_hp'] = game['boss_hp'] - 3
+        game['poison_timer'] = game['poison_timer'] - 1
+    if game['recharge_timer']:
+        game['player_mana'] = game['player_mana'] + 101
+        game['recharge_timer'] = game['recharge_timer'] - 1
 
 
-def boss_fight(player, boss, spell_order, hard_mode=False):
-    spent_mana = 0
-    effects = []
-    # print(', '.join(s.name for s in spell_order))
-
-    for spell in spell_order:
-        if hard_mode:
-            player.hp -= 1
-            if player.hp <= 0:
-                # print('Player died. Game over. :(')
-                return sys.maxsize
-
-        # print('-- Player Turn --')
-        # player.print_player()
-        # boss.print_boss()
-
-        player.process_status()
-        boss.process_status()
+def player_turn(game, spell):
+    if spell == 'magic_missle':
+        game['boss_hp'] = game['boss_hp'] - 4
+    elif spell == 'drain':
+        game['boss_hp'] = game['boss_hp'] - 2
+        game['player_hp'] = game['player_hp'] + 2
+    elif spell == 'shield':
+        game['shield_timer'] = 6
+        game['player_armor'] = game['player_armor'] + 7
+    elif spell == 'poison':
+        game['poison_timer'] = 6
+    elif spell == 'recharge':
+        game['recharge_timer'] = 5
+    game['player_mana'] = game['player_mana'] - SPELL_COSTS[spell]
 
 
-        # Pick a spell to use
-        if spell.cost > player.mp:
-            # print('Not enough mana to cast.')
-            return sys.maxsize
-
-        # Disallow repeated effects
-        if spell.effect == 'shielded' and player.shielded:
-            return sys.maxsize
-        elif spell.effect == 'poisoned' and boss.poisoned:
-            return sys.maxsize
-        elif spell.effect == 'recharge' and player.recharging:
-            return sys.maxsize
-
-        spent_mana += spell.cost
-        player.mp -= spell.cost
-        boss.hp -= spell.dmg
+def boss_turn(game):
+    dmg = max(game['boss_dmg'] - game['player_armor'], 1)
+    game['player_hp'] = game['player_hp'] - dmg
 
 
-        if spell.heal:
-            player.hp += spell.heal
-
-        if spell.effect == 'shielded':
-            player.shielded = spell.duration
-        elif spell.effect == 'poisoned':
-            boss.poisoned = spell.duration
-        elif spell.effect == 'recharge':
-            player.recharging = spell.duration
-
-        if boss.hp <= 0:
-            # print('Boss died. You win! :)')
-            print(spent_mana, '@', ' '.join(s.name for s in spell_order))
-            return spent_mana
-
-        # print('-- Boss Turn --')
-        # player.print_player()
-        # boss.print_boss()
-        player.process_status()
-        boss.process_status()
-
-        if boss.hp <= 0:
-            # print('Boss died. You win! :)')
-            print(spent_mana, '@', ' '.join(s.name for s in spell_order))
-            return spent_mana
-
-        # print('> Boss attacks for {} damage!'.format(max(1, boss.dmg - player.armour)))
-        player.hp -= max(1, boss.dmg - player.armour)
-        if player.hp <= 0:
-            # print('Player died. Game over. :(')
-            return sys.maxsize
-
-        # print
-
-    else:
-        # Fight did not terminate
-        return sys.maxsize
-
-    return spent_mana
+def check_for_endgame(game, min_mana_spent):
+    if game['boss_hp'] <= 0:
+        min_mana_spent = min(game['mana_spent'], min_mana_spent)
+        return 1, min_mana_spent
+    if game['player_hp'] <= 0:
+        return 2, min_mana_spent
+    return 0, min_mana_spent
 
 
-def simulate(hard_mode):
-    most_efficient = sys.maxsize
+def main(game, part_two=False):
+    min_mana_spent = 9e10
+    games = [game]
+    while len(games):
+        games, min_mana_spent = try_all_games(games, min_mana_spent, part_two)
+    return min_mana_spent
 
-    for n in range(9, 12):
-        found = False
-        for so in itertools.product(SPELLS, repeat=n):
-            if sum(s.cost for s in so) > most_efficient:
-                continue
 
-            boss = Character('BOSS', 71, 0, 10, 0)  # 55hp, 8dmg INPUT
-            player = Character('Caleb', 50, 500, 0, 0)  # 50HP, 500MP
+def try_all_games(games, min_mana_spent, part_two):
+    new_games = []
+    for game in games:
 
-            # boss = Character('BOSS', 13, 0, 8, 0)
-            # player = Character('Caleb', 10, 250, 0, 0)  # 50HP, 500MP
-            a = boss_fight(player, boss, so, hard_mode)
+        if part_two:
+            game['player_hp'] = game['player_hp'] - 1
 
-            if a < most_efficient:
-                most_efficient = a
-                found = True
+        endgame, min_mana_spent = check_for_endgame(game, min_mana_spent)
+        if endgame:
+            continue
 
-        if found:
-            return most_efficient
+        # apply player's turn effects
+        apply_effects(game)
+        endgame, min_mana_spent = check_for_endgame(game, min_mana_spent)
+        if endgame:
+            continue
 
-print('Most efficient MP on easy mode: %i' % simulate(hard_mode=False))
-# print('Most efficient MP on hard mode: %i' % simulate(hard_mode=True))
+        min_mana_spent = try_all_spells(game, min_mana_spent, new_games)
+
+    return new_games, min_mana_spent
+
+
+def try_all_spells(game, min_mana_spent, new_games):
+    castable_spells = [spell for spell, cost in SPELL_COSTS.items()
+                       if cost <= game['player_mana']]
+    if game['shield_timer'] and 'shield' in castable_spells:
+        castable_spells.remove('shield')
+    if game['poison_timer'] and 'poison' in castable_spells:
+        castable_spells.remove('poison')
+    if game['recharge_timer'] and 'recharge' in castable_spells:
+        castable_spells.remove('recharge')
+
+    for spell in castable_spells:
+
+        sub_game = game.copy()
+        sub_game['spells_cast'] = list(sub_game['spells_cast']) + [spell]
+        sub_game['mana_spent'] = sub_game['mana_spent']+SPELL_COSTS[spell]
+
+        # players turn
+        player_turn(sub_game, spell)
+        endgame, min_mana_spent = check_for_endgame(sub_game, min_mana_spent)
+        if endgame:
+            continue
+
+        # end early is too much mana spent
+        if sub_game['mana_spent'] > min_mana_spent:
+            continue
+
+        # boss's turn
+        apply_effects(sub_game)
+        endgame, min_mana_spent = check_for_endgame(sub_game, min_mana_spent)
+        if endgame:
+            continue
+
+        boss_turn(sub_game)
+        endgame, min_mana_spent = check_for_endgame(sub_game, min_mana_spent)
+        if endgame:
+            continue
+
+        new_games.append(sub_game)
+
+    return min_mana_spent
+
+
+initial_game = {
+    'player_hp': 50,
+    'player_mana': 500,
+    'player_armor': 0,
+
+    'boss_hp': 71,
+    'boss_dmg': 10,
+
+    'shield_timer': 0,
+    'poison_timer': 0,
+    'recharge_timer': 0,
+
+    'spells_cast': [],
+    'mana_spent': 0,
+}
+
+print(main(initial_game.copy()))
+print(main(initial_game.copy(), part_two=True))
