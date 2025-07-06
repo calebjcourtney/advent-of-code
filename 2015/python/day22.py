@@ -143,5 +143,7 @@ initial_game = {
     'mana_spent': 0,
 }
 
-print(main(initial_game.copy()))
-print(main(initial_game.copy(), part_two=True))
+
+if __name__ == '__main__':
+    print(main(initial_game.copy()))
+    print(main(initial_game.copy(), part_two=True))
