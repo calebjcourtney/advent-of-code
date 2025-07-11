@@ -12,7 +12,7 @@ def dragon_curve(data):
     a = data
     b = a[::-1]
     b = "".join(["1" if x == "0" else "0" for x in b])
-    return a + "0" + b
+    return f"{a}0{b}"
 
 
 def checksum(data):
