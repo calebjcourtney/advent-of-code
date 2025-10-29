@@ -21,7 +21,10 @@ MAP = {
 
 
 @timeit
-def main(data):
+def main():
+    data = get_data("01")
+    data = data.split(", ")
+
     current = Point(0, 0)
     p2 = None
     visited = {current}
@@ -38,13 +41,5 @@ def main(data):
 
     assert p2 is not None
 
-    return abs(current.x) + abs(current.y), abs(p2.x) + abs(p2.y)
-
-
-if __name__ == '__main__':
-    data = get_data("01")
-    data = data.split(", ")
-
-    p1, p2 = main(data)
-    print(p1)
-    print(p2)
+    print(abs(current.x) + abs(current.y))
+    print(abs(p2.x) + abs(p2.y))

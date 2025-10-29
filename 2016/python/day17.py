@@ -4,72 +4,107 @@ import hashlib
 from utils import get_data
 from utils import timeit
 from utils import Point
-from utils import N, S, E, W
-
-
-GRID = {
-    Point(x, y)
-    for x in range(4)
-    for y in range(4)
-}
-
-DIRECTIONS = {
-    "D": N,
-    "U": S,
-    "R": E,
-    "L": W,
-}
-
-RECIPROCALS = {
-    "D": "U",
-    "U": "D",
-    "R": "L",
-    "L": "R",
-}
-
 
 def md5_hash(data):
     return hashlib.md5(data.encode()).hexdigest()
 
 
+def get_open_doors(passcode, path):
+    hash_str = md5_hash(passcode + path)
+    doors = hash_str[:4]
+
+    open_doors = set()
+    directions = ['U', 'D', 'L', 'R']
+
+    for i, door in enumerate(doors):
+        if door in 'bcdef':
+            open_doors.add(directions[i])
+
+    return open_doors
+
+
+def get_valid_moves(pos, open_doors):
+    x, y = pos
+    valid_moves = []
+
+    for door in open_doors:
+        if door == 'U' and y > 0:
+            valid_moves.append(('U', Point(x, y-1)))
+        elif door == 'D' and y < 3:
+            valid_moves.append(('D', Point(x, y+1)))
+        elif door == 'L' and x > 0:
+            valid_moves.append(('L', Point(x-1, y)))
+        elif door == 'R' and x < 3:
+            valid_moves.append(('R', Point(x+1, y)))
+
+    return valid_moves
+
+
 @timeit
 def part_one(data):
-    start = Point(0, 0)
-    end = Point(3, 3)
-    horizon = deque([(start, data)])
+    passcode = data.strip()
+    start = (0, 0)
+    target = (3, 3)
 
-    while horizon:
-        current, path = horizon.popleft()
-        if current == end:
-            return "".join(c for c in path if c in DIRECTIONS)
+    queue = deque([(start, "")])
+    visited = set()
 
-        h = md5_hash(path)
-        # up
-        if (h[0] in "bcdef" and current + DIRECTIONS["U"] in GRID) or path[-1] == "D":
-            horizon.append((current + DIRECTIONS["U"], path + "U"))
-        # down
-        if (h[1] in "bcdef" and current + DIRECTIONS["D"] in GRID) or path[-1] == "U":
-            horizon.append((current + DIRECTIONS["D"], path + "D"))
-        # left
-        if (h[2] in "bcdef" and current + DIRECTIONS["L"] in GRID) or path[-1] == "R":
-            horizon.append((current + DIRECTIONS["L"], path + "L"))
-        # right
-        if (h[3] in "bcdef" and current + DIRECTIONS["R"] in GRID) or path[-1] == "L":
-            horizon.append((current + DIRECTIONS["R"], path + "R"))
+    while queue:
+        pos, path = queue.popleft()
+
+        if pos == target:
+            return path
+
+        state = (pos, path)
+        if state in visited:
+            continue
+        visited.add(state)
+
+        open_doors = get_open_doors(passcode, path)
+
+        for direction, new_pos in get_valid_moves(pos, open_doors):
+            new_path = path + direction
+            queue.append((new_pos, new_path))
+
+    return "No path found"
 
 
 @timeit
 def part_two(data):
-    for line in data:
-        pass
+    passcode = data.strip()
+    start = (0, 0)
+    target = (3, 3)
+
+    def find_all_paths(pos, path):
+        if pos == target:
+            return [path]
+
+        if len(path) > 1000:
+            return []
+
+        open_doors = get_open_doors(passcode, path)
+        all_paths = []
+
+        for direction, new_pos in get_valid_moves(pos, open_doors):
+            sub_paths = find_all_paths(new_pos, path + direction)
+            all_paths.extend(sub_paths)
+
+        return all_paths
+
+    all_paths = find_all_paths(start, "")
+
+    if not all_paths:
+        return 0
+
+    return len(max(all_paths, key=len))
 
 
-if __name__ == '__main__':
+@timeit
+def main():
     data = get_data("17")
-    data = "hijkl"
 
     p1_result = part_one(data)
-    print(p1_result)
+    print(f"Part 1: {p1_result}")
 
     p2_result = part_two(data)
-    print(p2_result)
+    print(f"Part 2: {p2_result}")
