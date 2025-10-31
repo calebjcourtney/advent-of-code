@@ -45,7 +45,7 @@ def part_two(data):
 
 
 @timeit
-def main(data):
+def main():
     data = get_data("{day}")
     grid = parse_grid(data)
     data = get_line_data("{day}")
