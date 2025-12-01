@@ -12,16 +12,10 @@ def main():
     pos = 50
     for line in data:
         nums = get_nums(line)[0]
-        for _ in range(nums):
-            if line.startswith("R"):
-                pos += 1
-            elif line.startswith("L"):
-                pos -= 1
+        diff = 1 if line.startswith("R") else -1
 
-            if pos >= 100:
-                pos -= 100
-            if pos < 0:
-                pos += 100
+        for _ in range(nums):
+            pos = (pos + diff) % 100
 
             if pos == 0:
                 p2 += 1
