@@ -9,7 +9,12 @@ def process_data(data):
 
 
 def p1_invalid(num):
-    return len(str(num)) % 2 == 0 and str(num)[:len(str(num))//2] == str(num)[len(str(num))//2:]
+    num_str = str(num)
+
+    if len(num_str) % 2 != 0:
+        return False
+
+    return num_str[:len(num_str)//2] == num_str[len(num_str)//2:]
 
 
 def p2_invalid(num):
