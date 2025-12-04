@@ -16,18 +16,20 @@ def part_one(grid):
 @timeit
 def part_two(grid):
     total_removed = 0
-    prev_grid = grid
+    prev_removed = 0
     while True:
-        points = [key for key in grid if grid[key] < 4]
-        if len(points) == 0:
-            return total_removed
-
-        total_removed += len(points)
-        for point in points:
+        for point in [key for key, value in grid.items() if value < 4]:
+            total_removed += 1
             del grid[point]
             for neighbor in DIRS_8:
                 if grid.get(point + neighbor) is not None:
                     grid[point + neighbor] -= 1
+
+        if prev_removed == total_removed:
+            return total_removed
+
+        prev_removed = total_removed
+
 
 
 @timeit
