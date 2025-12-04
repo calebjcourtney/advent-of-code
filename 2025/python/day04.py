@@ -1,25 +1,19 @@
 from utils import get_data
 from utils import parse_grid
 from utils import timeit
-from utils import Point
 from utils import DIRS_8
 
-import numpy
-import itertools
-import collections
-import re
+
+def count_neighbors(grid, point):
+    return sum(1 for direction in DIRS_8 if grid.get(point + direction, ".") != ".")
 
 
 @timeit
 def part_one(grid):
     total = 0
-    for point in grid.keys():
-        count = 0
-        for neighbor in DIRS_8:
-            if grid.get(point + neighbor) and grid[point + neighbor] == "@":
-                count += 1
-
-        if count < 4:
+    for point in grid:
+        neighbor_count = count_neighbors(grid, point)
+        if neighbor_count < 4:
             total += 1
 
     return total
@@ -27,39 +21,30 @@ def part_one(grid):
 
 @timeit
 def part_two(grid):
-    total = 0
-    changed = True
-    while changed:
-        changed = False
-        for point in grid.keys():
-            count = 0
-            for neighbor in DIRS_8:
-                if grid.get(point + neighbor) and grid[point + neighbor] == "@":
-                    count += 1
+    total_removed = 0
 
-            if count < 4:
-                total += 1
-                changed = True
+    while True:
+        points_to_remove = []
+
+        for point in grid:
+            neighbor_count = count_neighbors(grid, point)
+            if neighbor_count < 4:
+                points_to_remove.append(point)
                 grid[point] = "."
-        
-        grid = {key: value for key, value in grid.items() if value == "@"}
 
-    return total
+        if not points_to_remove:
+            break
+
+        for point in points_to_remove:
+            del grid[point]
+            total_removed += 1
+
+    return total_removed
 
 
 @timeit
 def main():
     data = get_data("04")
-#     data = """..@@.@@@@.
-# @@@.@.@.@@
-# @@@@@.@.@@
-# @.@@@@..@.
-# @@.@@@@.@@
-# .@@@@@@@.@
-# .@.@.@.@@@
-# @.@@@.@@@@
-# .@@@@@@@@.
-# @.@.@@@.@."""
     grid = parse_grid(data)
     grid = {key: value for key, value in grid.items() if value == "@"}
 
