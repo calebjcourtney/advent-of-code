@@ -89,10 +89,6 @@ def run_day(year, day):
 
         print("=" * 40)
         print("Execution completed.")
-
-    except Exception as e:
-        print(f"Error running day {day} of year {year}: {e}")
-        return False
     finally:
         # Always restore the original working directory
         os.chdir(original_cwd)
