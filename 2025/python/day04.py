@@ -31,7 +31,6 @@ def part_two(grid):
         prev_removed = total_removed
 
 
-
 @timeit
 def main():
     data = get_data("04")
