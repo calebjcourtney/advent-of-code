@@ -1,19 +1,12 @@
 from utils import get_data
 from utils import timeit
 
-from typing import NamedTuple
-
-
-class IngredientRange(NamedTuple):
-    start: int
-    end: int
-
 
 def parse_data(data):
     sections = data.split("\n\n")
     range_lines = sections[0].split("\n")
     ingredient_ranges = [
-        IngredientRange(int(range_line.split("-")[0]), int(range_line.split("-")[1]))
+        range(int(range_line.split("-")[0]), int(range_line.split("-")[1]) + 1)
         for range_line in range_lines
     ]
     available_ingredient_ids = list(map(int, sections[1].split()))
@@ -25,7 +18,7 @@ def parse_data(data):
 def part_one(ingredient_ranges, available_ingredient_ids):
     return sum(
         1 for ingredient_id in available_ingredient_ids
-        if any(r.start <= ingredient_id <= r.end for r in ingredient_ranges)
+        if any(ingredient_id in r for r in ingredient_ranges)
     )
 
 
@@ -36,17 +29,17 @@ def part_two(ingredient_ranges):
     while idx < len(ingredient_ranges) - 1:
         current_range = ingredient_ranges[idx]
         next_range = ingredient_ranges[idx + 1]
-        
-        if current_range.end >= next_range.start:
-            ingredient_ranges[idx] = IngredientRange(
+
+        if current_range.stop - 1 >= next_range.start:
+            ingredient_ranges[idx] = range(
                 current_range.start,
-                max(current_range.end, next_range.end)
+                max(current_range.stop, next_range.stop)
             )
             ingredient_ranges.pop(idx + 1)
         else:
             idx += 1
 
-    return sum(r.end - r.start + 1 for r in ingredient_ranges)
+    return sum(len(r) for r in ingredient_ranges)
 
 
 @timeit
