@@ -3,3 +3,17 @@
 
 *__pycache__*
 *.DS_Store
+
+# Rust
+/target/
+**/*.rs.bk
+*.pdb
+Cargo.lock
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+# Rust backup files
+**/*.rs~
