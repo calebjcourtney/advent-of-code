@@ -37,7 +37,7 @@ def find_available_days(year):
     days = []
     for item in os.listdir(year_dir):
         if item.startswith('day') and item.endswith('.py') and item != 'utils.py':
-            day_num = item[3:-3]  # Remove 'day' prefix and '.py' suffix
+            day_num = item[3:-3]
             if day_num.isdigit():
                 days.append(int(day_num))
     return sorted(days)
@@ -45,19 +45,16 @@ def find_available_days(year):
 
 def run_day(year, day):
     """Run the specified day's solution."""
-    # Validate year
     available_years = find_available_years()
     if year not in available_years:
         print(f"Error: Year {year} not found. Available years: {available_years}")
         return False
 
-    # Validate day
     available_days = find_available_days(year)
     if day not in available_days:
         print(f"Error: Day {day} not found for year {year}. Available days: {available_days}")
         return False
 
-    # Construct the module path
     module_path = f"{year}/python/day{day:02d}.py"
 
     if not os.path.exists(module_path):
@@ -65,32 +62,26 @@ def run_day(year, day):
         return False
 
     try:
-        # Temporarily change to the year's python directory
         original_cwd = os.getcwd()
         year_python_dir = f"{year}/python"
         os.chdir(year_python_dir)
 
-        # Add the current directory to Python path for imports
         sys.path.insert(0, os.getcwd())
 
-        # Load and execute the day module
         spec = importlib.util.spec_from_file_location(f"day{day:02d}", f"day{day:02d}.py")
         module = importlib.util.module_from_spec(spec)
 
         print(f"Running Advent of Code {year} Day {day}")
         print("=" * 40)
 
-        # First execute the module to define all functions
         spec.loader.exec_module(module)
-        
-        # Then call the main function if it exists
+
         if hasattr(module, 'main'):
             module.main()
 
         print("=" * 40)
         print("Execution completed.")
     finally:
-        # Always restore the original working directory
         os.chdir(original_cwd)
 
     return True
