@@ -141,6 +141,11 @@ impl std::ops::Add for Point {
     }
 }
 
+// Direction constants
+pub const N: Point = Point { x: 0, y: 1 };
+pub const E: Point = Point { x: 1, y: 0 };
+pub const W: Point = Point { x: -1, y: 0 };
+
 pub fn parse_grid(data: &str, keep_values: Option<&str>) -> std::collections::HashMap<Point, char> {
     let mut grid = std::collections::HashMap::new();
     let lines: Vec<&str> = data.lines().collect();
