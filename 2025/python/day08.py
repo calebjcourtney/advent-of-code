@@ -1,11 +1,11 @@
 from utils import get_line_data
 from utils import timeit
 from utils import get_nums
-import math
 
 from typing import NamedTuple
 from itertools import combinations
 from collections import Counter
+import math
 
 TARGET_PAIRS = 1000
 
@@ -31,6 +31,7 @@ class CircuitConnector:
     def __init__(self, points):
         self.points = points
         self.parent = {point: point for point in points}
+        self._circuit_count = len(points)
 
     def find(self, point):
         if self.parent[point] != point:
@@ -42,10 +43,8 @@ class CircuitConnector:
         root2 = self.find(p2)
         if root1 != root2:
             self.parent[root1] = root2
+            self._circuit_count -= 1
             return True
-
-    def count_circuits(self):
-        return len(set(self.find(point) for point in self.points))
 
     def get_circuit_sizes(self):
         return sorted(Counter(self.find(point) for point in self.points).values(), reverse=True)
@@ -64,14 +63,23 @@ class CircuitConnector:
 
             if i == TARGET_PAIRS - 1:
                 sizes = self.get_circuit_sizes()
-                part_one_result = sizes[0] * sizes[1] * sizes[2]
+                if len(sizes) >= 3:
+                    part_one_result = sizes[0] * sizes[1] * sizes[2]
+                elif len(sizes) == 2:
+                    part_one_result = sizes[0] * sizes[1]
+                elif len(sizes) == 1:
+                    part_one_result = sizes[0]
+                else:
+                    part_one_result = 0
 
             if was_connected:
-                if self.count_circuits() == 1:
+                if self._circuit_count == 1:
                     part_two_result = p1.x * p2.x
 
             if part_one_result is not None and part_two_result is not None:
                 return part_one_result, part_two_result
+
+        return part_one_result, part_two_result
 
 
 @timeit
