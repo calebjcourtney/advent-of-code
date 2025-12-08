@@ -238,12 +238,18 @@ def points_between(p1, p2):
     return output
 
 
-def manhattan(p1, p2):
-    return abs(p1.x - p2.x) + abs(p1.y - p2.y)
+def manhattan(p1: Point, p2: Point, p3: Point = None):
+    if p3 is None:
+        return abs(p1.x - p2.x) + abs(p1.y - p2.y)
+    else:
+        return abs(p1.x - p2.x) + abs(p1.y - p2.y) + abs(p1.z - p3.z)
 
 
-def euclidean_distance(p1, p2):
-    return math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2)
+def euclidean_distance(p1: Point, p2: Point, p3: Point = None):
+    if p3 is None:
+        return math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2)
+    else:
+        return math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2 + (p1.z - p3.z) ** 2)
 
 
 def max_row_col(p1, p2):
