@@ -43,7 +43,6 @@ class CircuitConnector:
         if root1 != root2:
             self.parent[root1] = root2
             return True
-        return False
 
     def count_circuits(self):
         return len(set(self.find(point) for point in self.points))
