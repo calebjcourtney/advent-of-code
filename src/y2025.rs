@@ -17,6 +17,8 @@ mod day06;
 mod day07;
 #[path = "../2025/rust/day08.rs"]
 mod day08;
+#[path = "../2025/rust/day09.rs"]
+mod day09;
 
 pub fn run_day(day: u32) {
     match day {
@@ -28,6 +30,7 @@ pub fn run_day(day: u32) {
         6 => day06::main(),
         7 => day07::main(),
         8 => day08::main(),
+        9 => day09::main(),
         _ => {
             eprintln!("Error: Day {} not yet implemented for year 2025.", day);
             std::process::exit(1);
