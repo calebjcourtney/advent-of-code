@@ -24,35 +24,32 @@ fn build_graph(data: &[String]) -> Graph {
 
 fn count_paths(
     graph: &Graph,
-    cache: &mut HashMap<(String, String, bool, bool), i64>,
-    curr: &str,
+    cache: &mut HashMap<(String, String), i64>,
+    start: &str,
     end: &str,
-    has_visited_dac: bool,
-    has_visited_fft: bool,
 ) -> i64 {
-    let key = (curr.to_string(), end.to_string(), has_visited_dac, has_visited_fft);
+    let key = (start.to_string(), end.to_string());
 
     if let Some(&cached) = cache.get(&key) {
         return cached;
     }
 
-    let has_visited_dac = has_visited_dac || curr == "fft";
-    let has_visited_fft = has_visited_fft || curr == "dac";
+    if start == end {
+        cache.insert(key, 1);
+        return 1;
+    }
 
-    if curr == end {
-        let result = if has_visited_dac && has_visited_fft { 1 } else { 0 };
-        cache.insert(key, result);
-        return result;
+    if start == "out" {
+        cache.insert(key, 0);
+        return 0;
     }
 
     let result = graph
-        .get(curr)
+        .get(start)
         .map(|neighbors| {
             neighbors
                 .iter()
-                .map(|neighbor| {
-                    count_paths(graph, cache, neighbor, end, has_visited_dac, has_visited_fft)
-                })
+                .map(|neighbor| count_paths(graph, cache, neighbor, end))
                 .sum()
         })
         .unwrap_or(0);
@@ -67,11 +64,14 @@ pub fn main() {
 
     let mut cache = HashMap::new();
 
-    let part_one = count_paths(&graph, &mut cache, "you", "out", true, true);
+    let part_one = count_paths(&graph, &mut cache, "you", "out");
     println!("{}", part_one);
 
-    cache.clear();
-
-    let part_two = count_paths(&graph, &mut cache, "svr", "out", false, false);
+    let part_two = count_paths(&graph, &mut cache, "svr", "fft")
+        * count_paths(&graph, &mut cache, "fft", "dac")
+        * count_paths(&graph, &mut cache, "dac", "out")
+        + count_paths(&graph, &mut cache, "svr", "dac")
+            * count_paths(&graph, &mut cache, "dac", "fft")
+            * count_paths(&graph, &mut cache, "fft", "out");
     println!("{}", part_two);
 }
