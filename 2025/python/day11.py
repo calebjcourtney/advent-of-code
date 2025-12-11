@@ -13,17 +13,14 @@ def build_graph(data):
 
 
 @memoize
-def count_paths(curr, end, has_visited_dac, has_visited_fft):
-    has_visited_dac = has_visited_dac or curr == "fft"
-    has_visited_fft = has_visited_fft or curr == "dac"
+def count_paths(start, end):
+    if start == end:
+        return 1
 
-    if curr == end:
-        return 1 if has_visited_dac and has_visited_fft else 0
+    if start == "out":
+        return 0
 
-    return sum(
-        count_paths(neighbor, end, has_visited_dac, has_visited_fft)
-        for neighbor in GRAPH[curr]
-    )
+    return sum(count_paths(neighbor, end) for neighbor in GRAPH[start])
 
 
 @timeit
@@ -31,8 +28,8 @@ def main():
     data = get_line_data("11")
     build_graph(data)
 
-    part_one = count_paths("you", "out", True, True)
+    part_one = count_paths("you", "out")
     print(part_one)
 
-    part_two = count_paths("svr", "out", False, False)
+    part_two = count_paths("svr", "fft") * count_paths("fft", "dac") * count_paths("dac", "out") + count_paths("svr", "dac") * count_paths("dac", "fft") * count_paths("fft", "out")
     print(part_two)
