@@ -14,10 +14,8 @@ def build_graph(data):
 
 @memoize
 def count_paths(curr, end, has_visited_dac, has_visited_fft):
-    if curr == "fft":
-        has_visited_dac = True
-    if curr == "dac":
-        has_visited_fft = True
+    has_visited_dac = has_visited_dac or curr == "fft"
+    has_visited_fft = has_visited_fft or curr == "dac"
 
     if curr == end:
         return 1 if has_visited_dac and has_visited_fft else 0
